@@ -86,16 +86,25 @@ class handler(BaseHTTPRequestHandler):
             except Exception:
                 response_text = "{}"
             
-            # Clean up response markdown block wrappers if present
-            if response_text.startswith("```json"):
-                response_text = response_text.split("```json")[1].split("```")[0].strip()
-            elif response_text.startswith("```"):
-                response_text = response_text.split("```")[1].split("```")[0].strip()
+            # Robustly isolate the JSON block by finding the first '{' and the last '}'
+            start = response_text.find("{")
+            end = response_text.rfind("}")
 
-            try:
-                result_json = json.loads(response_text)
-            except json.JSONDecodeError:
-                result_json = {"changes": [], "raw_response": response_text}
+            result_json = {"changes": []}
+
+            if start != -1 and end != -1 and end > start:
+                json_str = response_text[start : end + 1]
+                try:
+                    result_json = json.loads(json_str)
+                except json.JSONDecodeError as exc:
+                    print(f"JSON decode failed on compare brackets: {exc}")
+                    pass
+            else:
+                try:
+                    result_json = json.loads(response_text)
+                except Exception as exc:
+                    print(f"Fallback compare JSON parse failed: {exc}")
+                    result_json = {"changes": [], "raw_response": response_text}
 
             return self._json(200, result_json)
 

@@ -123,29 +123,36 @@ def _parse_llm_json(text: str) -> dict[str, Any]:
     Returns:
         Parsed JSON dict.
     """
-    # Strip markdown code fences if present
     cleaned = text.strip()
-    if cleaned.startswith("```json"):
-        cleaned = cleaned[7:]
-    elif cleaned.startswith("```"):
-        cleaned = cleaned[3:]
-    if cleaned.endswith("```"):
-        cleaned = cleaned[:-3]
-    cleaned = cleaned.strip()
 
+    # Robustly isolate the JSON block by finding the first '{' and the last '}'
+    start = cleaned.find("{")
+    end = cleaned.rfind("}")
+
+    if start != -1 and end != -1 and end > start:
+        json_str = cleaned[start : end + 1]
+        try:
+            return json.loads(json_str)
+        except json.JSONDecodeError as exc:
+            print(f"JSON decode failed on extracted brackets: {exc}")
+            print(f"Extracted bracket text was: {json_str}")
+            pass
+
+    # Fallback to direct parsing
     try:
+        if cleaned.startswith("```json"):
+            cleaned = cleaned[7:]
+        elif cleaned.startswith("```"):
+            cleaned = cleaned[3:]
+        if cleaned.endswith("```"):
+            cleaned = cleaned[:-3]
+        cleaned = cleaned.strip()
         return json.loads(cleaned)
-    except json.JSONDecodeError:
-        # Try to find JSON object in the text
-        start = cleaned.find("{")
-        end = cleaned.rfind("}")
-        if start != -1 and end != -1 and end > start:
-            try:
-                return json.loads(cleaned[start : end + 1])
-            except json.JSONDecodeError:
-                pass
-
-        # Return a minimal structure on parse failure
+    except Exception as exc:
+        print(f"Direct JSON parse fallback failed: {exc}")
+        print(f"Raw Cleaned Text was: {cleaned}")
+        
+        # Return a minimal structure on complete parse failure
         return {
             "clause_analyses": [],
             "document_summary": "Analysis completed but response parsing failed. Please retry.",
