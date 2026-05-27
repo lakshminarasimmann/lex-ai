@@ -13,7 +13,7 @@ import os
 import sys
 from typing import Any, Optional
 
-import anthropic
+import google.generativeai as genai
 
 # Vercel local-import shim
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -40,12 +40,12 @@ class handler(BaseHTTPRequestHandler):
             c1_str = "\n".join([f"- Clause {c.get('index', idx)}: {c.get('text', '')[:400]}" for idx, c in enumerate(clauses_1[:15])])
             c2_str = "\n".join([f"- Clause {c.get('index', idx)}: {c.get('text', '')[:400]}" for idx, c in enumerate(clauses_2[:15])])
 
-            # Setup Anthropic API
-            api_key = os.environ.get("ANTHROPIC_API_KEY")
+            # Setup Gemini API
+            api_key = os.environ.get("GEMINI_API_KEY")
             if not api_key:
-                return self._error(500, "ANTHROPIC_API_KEY is not configured on the server")
+                return self._error(500, "GEMINI_API_KEY is not configured on the server")
 
-            client = anthropic.Anthropic(api_key=api_key)
+            genai.configure(api_key=api_key)
 
             prompt = (
                 f"You are a senior contract analyst. Compare these two documents:\n\n"
@@ -68,15 +68,20 @@ class handler(BaseHTTPRequestHandler):
                 f"Do not include any intro or wrap text. Return ONLY the JSON object."
             )
 
-            # Call Claude
-            resp = client.messages.create(
-                model="claude-3-5-sonnet-20240620",
-                max_tokens=1500,
-                system="You are a precise contract comparison system. Always output valid JSON only.",
-                messages=[{"role": "user", "content": prompt}]
+            # Call Gemini
+            model = genai.GenerativeModel(
+                model_name="gemini-1.5-flash",
+                system_instruction="You are a precise contract comparison system. Always output valid JSON only."
+            )
+            resp = model.generate_content(
+                prompt,
+                generation_config=genai.GenerationConfig(
+                    max_output_tokens=1500,
+                    response_mime_type="application/json"
+                )
             )
 
-            response_text = resp.content[0].text.strip() if resp.content else "{}"
+            response_text = resp.text.strip() if resp.text else "{}"
             
             # Clean up response markdown block wrappers if present
             if response_text.startswith("```json"):

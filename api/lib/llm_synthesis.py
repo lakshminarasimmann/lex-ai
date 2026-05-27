@@ -9,7 +9,7 @@ import json
 import os
 from typing import Any
 
-import anthropic
+import google.generativeai as genai
 
 
 def synthesize_analysis(
@@ -36,13 +36,11 @@ def synthesize_analysis(
         - ``negotiation_guide``: structured negotiation advice.
 
     Raises:
-        RuntimeError: If ``ANTHROPIC_API_KEY`` is not set.
-    """
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
+    api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY environment variable is not set")
+        raise RuntimeError("GEMINI_API_KEY environment variable is not set")
 
-    client = anthropic.Anthropic(api_key=api_key)
+    genai.configure(api_key=api_key)
 
     # Take top 10 riskiest clauses
     top_clauses = risky_clauses[:10]
@@ -93,30 +91,23 @@ Format your ENTIRE response as a JSON object with this exact structure:
 Return ONLY the JSON object, no other text."""
 
     try:
-        message = client.messages.create(
-            model="claude-sonnet-4-20250514",
-            max_tokens=4096,
-            messages=[
-                {
-                    "role": "user",
-                    "content": user_prompt,
-                }
-            ],
-            system="You are a senior legal analyst. You provide clear, accurate legal analysis in JSON format. Always respond with valid JSON only.",
+        model = genai.GenerativeModel(
+            model_name="gemini-1.5-flash",
+            system_instruction="You are a senior legal analyst. You provide clear, accurate legal analysis in JSON format. Always respond with valid JSON only."
         )
-
-        # Extract text content from the response
-        response_text = ""
-        for block in message.content:
-            if hasattr(block, "text"):
-                response_text += block.text
+        response = model.generate_content(
+            user_prompt,
+            generation_config=genai.GenerationConfig(
+                max_output_tokens=4096,
+                response_mime_type="application/json"
+            )
+        )
+        response_text = response.text if response.text else "{}"
 
         # Parse JSON from the response
         result = _parse_llm_json(response_text)
         return result
 
-    except anthropic.APIError as exc:
-        return _fallback_analysis(top_clauses, doc_type_display, str(exc))
     except Exception as exc:
         return _fallback_analysis(top_clauses, doc_type_display, str(exc))
 

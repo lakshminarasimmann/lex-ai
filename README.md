@@ -174,9 +174,8 @@ cp .env.example .env.local
 ```
 
 Fill in your API keys:
-- `ANTHROPIC_API_KEY` — [Get from Anthropic Console](https://console.anthropic.com)
+- `GEMINI_API_KEY` — [Get free key from Google AI Studio](https://aistudio.google.com/)
 - `HUGGINGFACE_API_KEY` — [Get from HuggingFace](https://huggingface.co/settings/tokens)
-- Database, Redis, Blob — Auto-provisioned via Vercel Dashboard
 
 ### 3. Database Setup
 

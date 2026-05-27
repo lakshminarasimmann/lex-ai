@@ -14,7 +14,7 @@ import os
 import sys
 from typing import Any, Optional
 
-import anthropic
+import google.generativeai as genai
 
 # Vercel local-import shim
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -72,20 +72,20 @@ class handler(BaseHTTPRequestHandler):
                 level = rc.get("riskLevel", "low")
                 context_str += f"\n- [{category}] (Risk: {level}): {rc.get('text', '')}\n"
 
-            # Setup Anthropic Client
-            api_key = os.environ.get("ANTHROPIC_API_KEY")
+            # Setup Gemini Client
+            api_key = os.environ.get("GEMINI_API_KEY")
             if not api_key:
-                return self._error(500, "ANTHROPIC_API_KEY is not configured on the server")
+                return self._error(500, "GEMINI_API_KEY is not configured on the server")
 
-            client = anthropic.Anthropic(api_key=api_key)
+            genai.configure(api_key=api_key)
 
-            # Build message history for Claude
-            claude_messages = []
+            # Build message history for Gemini
+            gemini_contents = []
             for h in history[-6:]:
-                role = "user" if h.get("role") == "user" else "assistant"
-                claude_messages.append({
+                role = "user" if h.get("role") == "user" else "model"
+                gemini_contents.append({
                     "role": role,
-                    "content": h.get("content", "")
+                    "parts": [h.get("content", "")]
                 })
 
             prompt = (
@@ -97,25 +97,27 @@ class handler(BaseHTTPRequestHandler):
                 f"but clearly state if you are drawing on general legal knowledge rather than the text itself."
             )
             
-            claude_messages.append({
+            gemini_contents.append({
                 "role": "user",
-                "content": prompt
+                "parts": [prompt]
             })
 
-            # Call Claude API
-            resp = client.messages.create(
-                model="claude-3-5-sonnet-20240620",
-                max_tokens=1000,
-                system=(
+            # Call Gemini API
+            model = genai.GenerativeModel(
+                model_name="gemini-1.5-flash",
+                system_instruction=(
                     "You are a helpful senior legal assistant. "
                     "You explain complex legal concepts in plain, direct English. "
                     "Do not sound overly bureaucratic. Never give direct professional legal advice. "
                     "Use formatting like bullet points or bold text to make explanations highly readable."
-                ),
-                messages=claude_messages
+                )
+            )
+            resp = model.generate_content(
+                gemini_contents,
+                generation_config=genai.GenerationConfig(max_output_tokens=1000)
             )
 
-            response_content = resp.content[0].text if resp.content else "I apologize, but I could not formulate an answer."
+            response_content = resp.text if resp.text else "I apologize, but I could not formulate an answer."
 
             return self._json(200, {
                 "reply": response_content

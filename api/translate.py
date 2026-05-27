@@ -13,7 +13,7 @@ import os
 import sys
 from typing import Any, Optional
 
-import anthropic
+import google.generativeai as genai
 
 # Vercel local-import shim
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -48,12 +48,12 @@ class handler(BaseHTTPRequestHandler):
 
             lang_name = _LANG_MAP[target_lang]
 
-            # Setup Anthropic Client
-            api_key = os.environ.get("ANTHROPIC_API_KEY")
+            # Setup Gemini Client
+            api_key = os.environ.get("GEMINI_API_KEY")
             if not api_key:
-                return self._error(500, "ANTHROPIC_API_KEY is not configured on the server")
+                return self._error(500, "GEMINI_API_KEY is not configured on the server")
 
-            client = anthropic.Anthropic(api_key=api_key)
+            genai.configure(api_key=api_key)
 
             prompt = (
                 f"You are a professional legal translator. "
@@ -65,15 +65,17 @@ class handler(BaseHTTPRequestHandler):
                 f"notes, or formatting."
             )
 
-            # Call Claude API
-            resp = client.messages.create(
-                model="claude-3-5-sonnet-20240620",
-                max_tokens=1000,
-                system=f"You are a helpful translator specializing in legal translation to {lang_name}.",
-                messages=[{"role": "user", "content": prompt}]
+            # Call Gemini API
+            model = genai.GenerativeModel(
+                model_name="gemini-1.5-flash",
+                system_instruction=f"You are a helpful translator specializing in legal translation to {lang_name}."
+            )
+            resp = model.generate_content(
+                prompt,
+                generation_config=genai.GenerationConfig(max_output_tokens=1000)
             )
 
-            translated_text = resp.content[0].text.strip() if resp.content else ""
+            translated_text = resp.text.strip() if resp.text else ""
 
             return self._json(200, {
                 "translated_text": translated_text,
