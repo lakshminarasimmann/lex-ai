@@ -93,6 +93,67 @@ Format your ENTIRE response as a JSON object with this exact structure:
 Return ONLY the JSON object, no other text."""
 
     try:
+        schema = {
+            "type": "object",
+            "properties": {
+                "clause_analyses": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "clause_index": {"type": "integer"},
+                            "explanation": {"type": "string"},
+                            "disadvantage": {"type": "string"},
+                            "counter_clause": {"type": "string"}
+                        },
+                        "required": ["clause_index", "explanation", "disadvantage", "counter_clause"]
+                    }
+                },
+                "document_summary": {"type": "string"},
+                "top_things_to_know": {
+                    "type": "array",
+                    "items": {"type": "string"}
+                },
+                "negotiation_guide": {
+                    "type": "object",
+                    "properties": {
+                        "push_back_clauses": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "clause_summary": {"type": "string"},
+                                    "suggested_wording": {"type": "string"}
+                                },
+                                "required": ["clause_summary", "suggested_wording"]
+                            }
+                        },
+                        "dos": {
+                            "type": "array",
+                            "items": {"type": "string"}
+                        },
+                        "donts": {
+                            "type": "array",
+                            "items": {"type": "string"}
+                        },
+                        "market_terms": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "metric": {"type": "string"},
+                                    "standard": {"type": "string"}
+                                },
+                                "required": ["metric", "standard"]
+                            }
+                        }
+                    },
+                    "required": ["push_back_clauses", "dos", "donts", "market_terms"]
+                }
+            },
+            "required": ["clause_analyses", "document_summary", "top_things_to_know", "negotiation_guide"]
+        }
+
         model = genai.GenerativeModel(
             model_name="gemini-2.5-flash",
             system_instruction="You are a senior legal analyst. You provide clear, accurate legal analysis in JSON format. Always respond with valid JSON only."
@@ -101,7 +162,8 @@ Return ONLY the JSON object, no other text."""
             user_prompt,
             generation_config=genai.GenerationConfig(
                 max_output_tokens=4096,
-                response_mime_type="application/json"
+                response_mime_type="application/json",
+                response_schema=schema
             )
         )
         response_text = response.text if response.text else "{}"
