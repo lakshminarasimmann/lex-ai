@@ -1,0 +1,55 @@
+'use client';
+
+import React, { useState } from 'react';
+import { LayoutDashboard, AlertCircle, HelpCircle, Briefcase } from 'lucide-react';
+import Tabs from '@/components/ui/Tabs';
+import Card from '@/components/ui/Card';
+import SummaryTab from './SummaryTab';
+import RiskFlagsTab from './RiskFlagsTab';
+import MissingClausesTab from './MissingClausesTab';
+import NegotiationTab from './NegotiationTab';
+import { AnalysisResults } from '@/lib/types';
+
+interface AnalysisPanelProps {
+  results: AnalysisResults;
+  onSelectClause?: (pageNumber: number) => void;
+}
+
+export default function AnalysisPanel({ results, onSelectClause }: AnalysisPanelProps) {
+  const [activeTab, setActiveTab] = useState('summary');
+
+  const tabs = [
+    { id: 'summary', label: 'Summary', icon: LayoutDashboard },
+    { id: 'risks', label: 'Risk Flags', icon: AlertCircle },
+    { id: 'missing', label: 'Missing', icon: HelpCircle },
+    { id: 'negotiation', label: 'Playbook', icon: Briefcase },
+  ];
+
+  return (
+    <Card className="flex flex-col h-full border-[rgba(255,255,255,0.06)] bg-[#0c0c16]/50 backdrop-blur-md p-6">
+      {/* Tab Switcher */}
+      <div className="mb-4">
+        <Tabs 
+          tabs={tabs} 
+          activeTab={activeTab} 
+          onTabChange={(id) => setActiveTab(id)} 
+        />
+      </div>
+
+      {/* Tab Content Panels */}
+      <div className="flex-1 overflow-hidden">
+        {activeTab === 'summary' && <SummaryTab results={results} />}
+        {activeTab === 'risks' && (
+          <RiskFlagsTab 
+            clauses={results.clauses} 
+            onSelectClause={onSelectClause} 
+          />
+        )}
+        {activeTab === 'missing' && (
+          <MissingClausesTab missing={results.analysis.missingClauses} />
+        )}
+        {activeTab === 'negotiation' && <NegotiationTab results={results} />}
+      </div>
+    </Card>
+  );
+}

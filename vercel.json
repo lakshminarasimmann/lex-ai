@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/**/*.py": {
+      "runtime": "@vercel/python",
+      "maxDuration": 60,
+      "memory": 1024,
+      "excludeFiles": "{.next,node_modules,public,src,prisma,tests,.git}/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/parse-document", "destination": "/api/parse_document" },
+    { "source": "/api/chat", "destination": "/api/chat" },
+    { "source": "/api/compare", "destination": "/api/compare" },
+    { "source": "/api/translate", "destination": "/api/translate" }
+  ]
+}

@@ -1,0 +1,520 @@
+{
+  "rental_agreement": [
+    {
+      "id": "security_deposit",
+      "name": "Security Deposit",
+      "keywords": ["security deposit", "refundable deposit", "caution deposit", "earnest money", "deposit amount", "advance deposit", "deposit refund", "deposit deduction"],
+      "why_matters": "Defines the amount held as security against damages or unpaid rent. Without this clause, disputes over deposits become difficult to resolve and tenants may lose their deposit unfairly.",
+      "template_clause": "The Tenant shall pay a security deposit of [AMOUNT] upon execution of this Agreement. The deposit shall be refundable within 30 days of lease termination, less any deductions for unpaid rent, damages beyond normal wear and tear, or other charges as documented in the move-out inspection report. The Landlord shall provide an itemized statement of any deductions."
+    },
+    {
+      "id": "maintenance_responsibility",
+      "name": "Maintenance Responsibility",
+      "keywords": ["maintenance", "repair", "upkeep", "wear and tear", "structural repairs", "maintenance responsibility", "landlord repair", "tenant maintenance"],
+      "why_matters": "Clarifies who is responsible for repairs and maintenance of the property. Ambiguity here can lead to disputes and deterioration of the property with neither party taking responsibility.",
+      "template_clause": "The Landlord shall be responsible for all structural repairs, plumbing, electrical systems, and exterior maintenance. The Tenant shall be responsible for routine maintenance including cleaning, minor repairs under [AMOUNT], and maintaining all fixtures and appliances in good working condition. The Tenant shall promptly notify the Landlord of any needed repairs."
+    },
+    {
+      "id": "notice_period",
+      "name": "Notice Period",
+      "keywords": ["notice period", "advance notice", "written notice", "days notice", "termination notice", "vacate notice", "notice to quit", "prior notice"],
+      "why_matters": "Specifies how much advance notice is required before terminating the lease. Without this, either party could face sudden displacement or vacancy without adequate preparation time.",
+      "template_clause": "Either party may terminate this Agreement by providing [30/60/90] days written notice to the other party. Notice shall be delivered via registered mail or hand delivery with written acknowledgment. The notice period shall commence from the date of receipt of such notice."
+    },
+    {
+      "id": "subletting_rights",
+      "name": "Subletting Rights",
+      "keywords": ["sublet", "sublease", "subletting", "assign the lease", "transfer of tenancy", "sub-tenant", "sub-letting", "assignment of lease"],
+      "why_matters": "Determines whether the tenant can sublet the property to a third party. Without clarity, tenants may unknowingly violate terms or landlords may face unwanted occupants.",
+      "template_clause": "The Tenant shall not sublet, assign, or transfer this lease or any interest therein, or permit occupancy by any person other than those named herein, without the prior written consent of the Landlord. Such consent shall not be unreasonably withheld. Any approved subletting shall not release the Tenant from obligations under this Agreement."
+    },
+    {
+      "id": "rent_escalation",
+      "name": "Rent Escalation",
+      "keywords": ["rent increase", "rent escalation", "annual increase", "rent revision", "rent hike", "increment", "escalation clause", "rent adjustment"],
+      "why_matters": "Defines how and when rent can be increased during the lease period. Without this clause, tenants may face arbitrary or excessive rent hikes without any cap or predictability.",
+      "template_clause": "The monthly rent may be increased by a maximum of [5-10]% per annum upon completion of each lease year. The Landlord shall provide 60 days written notice of any rent increase. No rent increase shall take effect during the initial lock-in period. Any increase exceeding the stated percentage requires mutual written agreement."
+    },
+    {
+      "id": "dispute_resolution",
+      "name": "Dispute Resolution",
+      "keywords": ["dispute resolution", "arbitration", "mediation", "conflict resolution", "legal proceedings", "settle disputes", "grievance", "dispute mechanism"],
+      "why_matters": "Establishes the mechanism for resolving disagreements between landlord and tenant. Without this, disputes may escalate to costly litigation without first attempting amicable resolution.",
+      "template_clause": "Any dispute arising out of or in connection with this Agreement shall first be attempted to be resolved through mutual negotiation within 15 days. If unresolved, the parties shall submit to mediation before a mutually agreed mediator. If mediation fails, disputes shall be referred to arbitration under the Arbitration and Conciliation Act, with the venue at [CITY]."
+    },
+    {
+      "id": "lock_in_period",
+      "name": "Lock-in Period",
+      "keywords": ["lock-in period", "minimum period", "lock in", "minimum tenure", "mandatory period", "minimum stay", "initial term", "commitment period"],
+      "why_matters": "Defines a minimum period during which neither party can terminate the lease. This protects the landlord's investment and gives the tenant housing stability.",
+      "template_clause": "This Agreement shall have a lock-in period of [6/12] months from the commencement date, during which neither party shall terminate the Agreement. Early termination during the lock-in period shall require the terminating party to pay a penalty equivalent to [1-2] month(s) rent. After the lock-in period, standard notice period provisions shall apply."
+    },
+    {
+      "id": "inventory_list",
+      "name": "Inventory List",
+      "keywords": ["inventory", "fixtures", "furnishings", "items provided", "furniture list", "property condition", "inventory list", "movable assets"],
+      "why_matters": "Documents all items and their condition at move-in to prevent disputes about damages at move-out. Without this, tenants may be unfairly charged for pre-existing damage.",
+      "template_clause": "An inventory of all fixtures, fittings, furniture, and appliances provided by the Landlord is attached as Annexure A. Both parties shall jointly inspect and sign the inventory at the commencement and termination of this lease. Any items not listed in the inventory shall be deemed the Tenant's property."
+    },
+    {
+      "id": "utility_payments",
+      "name": "Utility Payments",
+      "keywords": ["utilities", "electricity", "water charges", "gas", "utility bills", "maintenance charges", "society charges", "common area"],
+      "why_matters": "Specifies who bears the cost of utilities and common area charges. Unclear allocation can lead to unpaid bills and service disconnections.",
+      "template_clause": "The Tenant shall pay for all utilities consumed during the tenancy including electricity, water, gas, internet, and telephone. Society/HOA maintenance charges shall be borne by the [Landlord/Tenant]. All utility connections shall remain in the Landlord's name. The Tenant shall provide proof of payment upon request."
+    },
+    {
+      "id": "termination_conditions",
+      "name": "Termination Conditions",
+      "keywords": ["termination", "early termination", "breach", "terminate the agreement", "end of lease", "lease termination", "cancellation", "vacating"],
+      "why_matters": "Lists specific conditions under which the lease can be terminated by either party. Without clear terms, arbitrary termination can cause significant hardship.",
+      "template_clause": "This Agreement may be terminated: (a) by mutual written consent; (b) by either party with the required notice period after the lock-in period; (c) immediately by the Landlord if the Tenant fails to pay rent for 30 consecutive days; (d) immediately by the Tenant if the property becomes uninhabitable. Upon termination, the Tenant shall vacate and return the property in its original condition, subject to normal wear and tear."
+    },
+    {
+      "id": "property_inspection",
+      "name": "Property Inspection",
+      "keywords": ["inspection", "right of entry", "landlord access", "property visit", "periodic inspection", "enter the premises", "access rights", "right to inspect"],
+      "why_matters": "Defines when and how the landlord may enter the property for inspections. Unrestricted access can violate the tenant's privacy and right to quiet enjoyment.",
+      "template_clause": "The Landlord or their authorized representative may inspect the property with 24 hours prior written notice to the Tenant, during reasonable hours (9 AM to 6 PM). Emergency repairs may be conducted without notice. The Landlord shall not conduct more than one routine inspection per quarter unless there is reasonable cause."
+    },
+    {
+      "id": "late_payment_penalty",
+      "name": "Late Payment Penalty",
+      "keywords": ["late payment", "penalty", "overdue rent", "late fee", "interest on arrears", "delayed payment", "payment default", "grace period"],
+      "why_matters": "Specifies consequences for late rent payments and any grace period. Without clear terms, landlords may impose arbitrary penalties or tenants may delay payments without consequence.",
+      "template_clause": "Rent is due on the [1st] of each month. A grace period of [5] days shall be allowed. After the grace period, a late fee of [2]% per month on the outstanding amount shall apply. If rent remains unpaid for [30] days, the Landlord may issue a notice to cure or terminate the lease as per the termination provisions."
+    }
+  ],
+  "employment_contract": [
+    {
+      "id": "probation_period",
+      "name": "Probation Period",
+      "keywords": ["probation", "probationary period", "trial period", "initial assessment", "probation review", "confirmation", "provisional appointment", "probation duration"],
+      "why_matters": "Defines the trial period during which either party can terminate employment with shorter notice. Without this, employees may not know when their employment becomes permanent.",
+      "template_clause": "The Employee shall serve a probationary period of [3/6] months from the date of joining. During probation, either party may terminate the employment with [15] days written notice or salary in lieu thereof. Upon satisfactory completion, the Employee shall be confirmed in writing. The probation period may be extended once by a maximum of [3] months with written notice."
+    },
+    {
+      "id": "severance_terms",
+      "name": "Severance Terms",
+      "keywords": ["severance", "severance pay", "separation pay", "redundancy pay", "termination compensation", "exit package", "severance package", "termination benefits"],
+      "why_matters": "Specifies compensation owed upon termination beyond notice period pay. Without this clause, employees may receive no financial cushion during involuntary separation.",
+      "template_clause": "In the event of termination without cause or redundancy, the Employee shall be entitled to severance pay equivalent to [1] month's salary for each completed year of service, up to a maximum of [12] months' salary. Severance pay shall be in addition to any notice period pay and shall be paid within [30] days of the last working day."
+    },
+    {
+      "id": "leave_policy",
+      "name": "Leave Policy",
+      "keywords": ["leave", "annual leave", "sick leave", "casual leave", "paid leave", "vacation", "holidays", "leave entitlement", "time off"],
+      "why_matters": "Defines the types and quantum of leave available to the employee. Without clear terms, disputes about leave entitlement and encashment can arise.",
+      "template_clause": "The Employee shall be entitled to: (a) [21] days of paid annual leave per year; (b) [10] days of sick leave per year; (c) [7] days of casual leave per year; (d) all gazetted public holidays. Unused annual leave may be carried forward up to a maximum of [10] days. Leave encashment at basic salary rate shall be available upon separation."
+    },
+    {
+      "id": "ip_assignment",
+      "name": "Intellectual Property Assignment",
+      "keywords": ["intellectual property", "IP assignment", "inventions", "work product", "copyright assignment", "patents", "proprietary rights", "work for hire"],
+      "why_matters": "Determines ownership of work created during employment. Without this, disputes about who owns innovations and creative works can arise.",
+      "template_clause": "All intellectual property, inventions, designs, software, and creative works developed by the Employee in the course of employment or using the Employer's resources shall be the exclusive property of the Employer. The Employee hereby assigns all rights, title, and interest in such works to the Employer. This clause does not apply to inventions developed entirely on the Employee's own time without using the Employer's resources, provided they are unrelated to the Employer's business."
+    },
+    {
+      "id": "non_compete",
+      "name": "Non-Compete Clause",
+      "keywords": ["non-compete", "non compete", "restrictive covenant", "competition restriction", "competing business", "competitive activity", "post-employment restriction", "non-competition"],
+      "why_matters": "Restricts the employee from working for competitors after leaving. Overly broad non-competes can unfairly limit career opportunities.",
+      "template_clause": "For a period of [6/12] months following termination, the Employee shall not directly or indirectly engage in, be employed by, or provide services to any business that directly competes with the Employer within [geographic area]. This restriction is limited to the specific business segment in which the Employee was engaged. The Employer shall pay [50]% of the Employee's last drawn monthly salary during the non-compete period as consideration."
+    },
+    {
+      "id": "notice_period",
+      "name": "Notice Period",
+      "keywords": ["notice period", "resignation notice", "termination notice", "advance notice", "notice of termination", "separation notice", "exit notice", "days notice"],
+      "why_matters": "Specifies the advance notice required before separation. This ensures both parties have adequate time for transition planning.",
+      "template_clause": "Either party may terminate employment by providing [30/60/90] days written notice or salary in lieu thereof. During the notice period, the Employee shall continue to perform duties and facilitate knowledge transfer. The Employer reserves the right to place the Employee on garden leave during the notice period while continuing full compensation."
+    },
+    {
+      "id": "confidentiality",
+      "name": "Confidentiality",
+      "keywords": ["confidentiality", "confidential information", "trade secret", "proprietary information", "non-disclosure", "NDA", "confidential data", "sensitive information"],
+      "why_matters": "Protects the employer's sensitive business information from disclosure. Without this, departing employees could share trade secrets with competitors.",
+      "template_clause": "The Employee shall not, during or after employment, disclose, publish, or use for personal benefit any confidential information of the Employer including but not limited to trade secrets, client lists, business strategies, financial data, and proprietary technology. This obligation survives termination of employment indefinitely for trade secrets and for [2] years for other confidential information."
+    },
+    {
+      "id": "performance_review",
+      "name": "Performance Review",
+      "keywords": ["performance review", "appraisal", "performance evaluation", "annual review", "performance assessment", "KPI", "performance criteria", "review cycle"],
+      "why_matters": "Establishes a structured process for evaluating employee performance. Without this, promotions, raises, and terminations may appear arbitrary.",
+      "template_clause": "The Employee's performance shall be reviewed annually through a formal appraisal process. Performance criteria and key performance indicators shall be communicated at the beginning of each review period. The review shall form the basis for compensation adjustments, promotions, and continued employment decisions. The Employee shall have the opportunity to provide self-assessment and discuss the review."
+    },
+    {
+      "id": "overtime_policy",
+      "name": "Overtime Policy",
+      "keywords": ["overtime", "extra hours", "working hours", "compensatory off", "overtime pay", "additional hours", "work beyond", "extended hours"],
+      "why_matters": "Defines compensation for work beyond standard hours. Without this, employees may be exploited with excessive hours without fair compensation.",
+      "template_clause": "Standard working hours are [40] hours per week. Work exceeding standard hours shall be considered overtime and compensated at [1.5x/2x] the regular hourly rate, or through compensatory time off at the Employee's election. Overtime must be pre-approved by the reporting manager. The Employer shall ensure compliance with applicable labor laws regarding maximum working hours."
+    },
+    {
+      "id": "termination_grounds",
+      "name": "Termination Grounds",
+      "keywords": ["termination for cause", "grounds for termination", "dismissal", "misconduct", "cause for termination", "termination grounds", "disciplinary action", "summary dismissal"],
+      "why_matters": "Lists specific reasons for which an employee may be terminated. Without clear grounds, wrongful termination claims become likely.",
+      "template_clause": "The Employer may terminate employment for cause including: (a) material breach of this Agreement; (b) gross misconduct or dishonesty; (c) conviction of a criminal offense; (d) willful negligence causing material harm; (e) continued failure to perform duties after written warning. Prior to termination for cause, the Employee shall be given a written notice specifying the grounds and [15] days to respond or cure the breach where possible."
+    },
+    {
+      "id": "grievance_procedure",
+      "name": "Grievance Procedure",
+      "keywords": ["grievance", "complaint procedure", "dispute resolution", "internal complaint", "grievance mechanism", "workplace dispute", "employee complaint", "escalation process"],
+      "why_matters": "Provides a structured channel for employees to raise workplace concerns. Without this, issues may fester or employees may resort directly to external legal action.",
+      "template_clause": "The Employee may raise workplace grievances through the following procedure: (1) Submit a written complaint to the immediate supervisor within [15] days of the issue; (2) If unresolved within [10] business days, escalate to the HR department; (3) If still unresolved, appeal to the Grievance Committee within [10] business days. The Employer shall ensure no retaliation against employees who raise grievances in good faith."
+    },
+    {
+      "id": "retirement_benefits",
+      "name": "Retirement Benefits",
+      "keywords": ["retirement", "pension", "provident fund", "gratuity", "retirement benefits", "superannuation", "PF contribution", "retirement age"],
+      "why_matters": "Specifies retirement-related benefits and the employer's contributions. Without this, employees may not receive statutory or contractual retirement benefits.",
+      "template_clause": "The Employer shall contribute to the Employee's retirement benefits as follows: (a) Provident Fund: [12]% of basic salary as per statutory requirements; (b) Gratuity: As per the Payment of Gratuity Act upon completion of [5] years of continuous service; (c) Any additional pension or superannuation scheme as per the Employer's policy. The retirement age shall be [60] years unless mutually extended."
+    }
+  ],
+  "loan_agreement": [
+    {
+      "id": "interest_rate",
+      "name": "Interest Rate",
+      "keywords": ["interest rate", "rate of interest", "annual percentage rate", "APR", "fixed rate", "floating rate", "variable rate", "interest calculation"],
+      "why_matters": "Defines the cost of borrowing and how interest is calculated. Without clarity, borrowers may face hidden or compounding charges.",
+      "template_clause": "The Loan shall bear interest at a [fixed/floating] rate of [X]% per annum, calculated on the outstanding principal balance on a [monthly reducing/daily reducing] basis. In case of a floating rate, the rate shall be benchmarked to [BENCHMARK] plus a spread of [X]%. Any change in the benchmark rate shall be communicated to the Borrower within [15] days."
+    },
+    {
+      "id": "repayment_schedule",
+      "name": "Repayment Schedule",
+      "keywords": ["repayment", "EMI", "installment", "repayment schedule", "monthly payment", "amortization", "payment schedule", "repayment period"],
+      "why_matters": "Specifies the timeline, frequency, and amount of loan repayments. Without this, borrowers may face unexpected payment demands.",
+      "template_clause": "The Borrower shall repay the Loan in [N] equal monthly installments (EMIs) of [AMOUNT] each, commencing on [DATE]. The EMI comprises principal and interest components as detailed in the amortization schedule attached as Annexure A. Payments shall be made via [method] on or before the [Nth] day of each month."
+    },
+    {
+      "id": "prepayment_terms",
+      "name": "Prepayment Terms",
+      "keywords": ["prepayment", "early repayment", "foreclosure", "prepayment penalty", "early settlement", "advance repayment", "prepayment charges", "partial prepayment"],
+      "why_matters": "Defines whether the borrower can repay early and at what cost. Excessive prepayment penalties can trap borrowers in unfavorable loans.",
+      "template_clause": "The Borrower may prepay the Loan in full or in part at any time after [12] months from the date of disbursement. Partial prepayment shall be in multiples of [AMOUNT] with a minimum of [AMOUNT]. Prepayment charges of [0-2]% of the prepaid amount shall apply for fixed-rate loans. No prepayment charges shall apply for floating-rate loans as per regulatory guidelines."
+    },
+    {
+      "id": "default_conditions",
+      "name": "Default Conditions",
+      "keywords": ["default", "event of default", "payment default", "breach", "default conditions", "loan default", "failure to pay", "default event"],
+      "why_matters": "Lists conditions that constitute a loan default and their consequences. Without clear terms, lenders may declare default arbitrarily.",
+      "template_clause": "An Event of Default shall occur if: (a) the Borrower fails to pay any installment within [30] days of the due date; (b) any representation proves materially false; (c) the Borrower becomes insolvent or files for bankruptcy; (d) the collateral is materially impaired. Upon default, the Lender may demand immediate repayment of the entire outstanding amount plus accrued interest and applicable penalties."
+    },
+    {
+      "id": "collateral",
+      "name": "Collateral",
+      "keywords": ["collateral", "security", "mortgage", "pledge", "hypothecation", "lien", "secured asset", "charge on property"],
+      "why_matters": "Identifies assets pledged as security for the loan. Clear collateral terms protect both parties in case of default.",
+      "template_clause": "The Loan is secured by [description of collateral] valued at [AMOUNT] as per the valuation report dated [DATE]. The Borrower hereby creates a [first/second] charge in favor of the Lender on the said collateral. The Borrower shall maintain adequate insurance on the collateral and shall not sell, lease, or encumber the collateral without the Lender's prior written consent."
+    },
+    {
+      "id": "late_payment",
+      "name": "Late Payment",
+      "keywords": ["late payment", "overdue", "penal interest", "late fee", "delayed payment", "default interest", "penalty interest", "additional interest"],
+      "why_matters": "Specifies charges for delayed payments beyond the due date. Without this, disputes about late fees can arise.",
+      "template_clause": "If any installment is not paid within [7] days of the due date, an additional penal interest of [2]% per annum shall apply on the overdue amount for the period of delay, in addition to the regular interest. The Lender may also charge a flat late payment fee of [AMOUNT] per instance. Repeated late payments may constitute an Event of Default."
+    },
+    {
+      "id": "force_majeure",
+      "name": "Force Majeure",
+      "keywords": ["force majeure", "act of god", "natural disaster", "pandemic", "unforeseeable", "beyond control", "extraordinary event", "force majure"],
+      "why_matters": "Addresses obligations during events beyond either party's control. Without this, borrowers may still face default during natural disasters or pandemics.",
+      "template_clause": "Neither party shall be liable for failure or delay in performing obligations due to events of Force Majeure including natural disasters, wars, pandemics, government actions, or other events beyond reasonable control. The affected party shall notify the other within [7] days and use reasonable efforts to mitigate the impact. Repayment obligations shall be deferred for the duration of the Force Majeure event, with the loan term extended accordingly."
+    },
+    {
+      "id": "governing_law",
+      "name": "Governing Law",
+      "keywords": ["governing law", "applicable law", "jurisdiction", "laws of", "legal jurisdiction", "courts of", "governed by", "subject to the laws"],
+      "why_matters": "Determines which legal framework applies and where disputes are adjudicated. This affects available legal remedies and enforcement.",
+      "template_clause": "This Agreement shall be governed by and construed in accordance with the laws of [JURISDICTION]. Any disputes arising under this Agreement shall be subject to the exclusive jurisdiction of the courts at [CITY]. Nothing in this clause shall prevent either party from seeking injunctive relief in any court of competent jurisdiction."
+    },
+    {
+      "id": "acceleration_clause",
+      "name": "Acceleration Clause",
+      "keywords": ["acceleration", "accelerate", "entire balance due", "full repayment", "demand full payment", "acceleration clause", "call the loan", "immediate repayment"],
+      "why_matters": "Allows the lender to demand full repayment upon certain events. Without understanding this, borrowers may face sudden demands for the entire loan amount.",
+      "template_clause": "Upon the occurrence of an Event of Default, the Lender may, at its discretion, declare the entire outstanding principal, accrued interest, and all other amounts due under this Agreement immediately due and payable. The Lender shall provide [15] days written notice before exercising this right, during which the Borrower may cure the default. Acceleration shall not apply for defaults cured within the notice period."
+    },
+    {
+      "id": "guarantor_obligations",
+      "name": "Guarantor Obligations",
+      "keywords": ["guarantor", "guarantee", "co-signer", "surety", "personal guarantee", "guarantor obligation", "joint liability", "co-borrower"],
+      "why_matters": "Defines the guarantor's liability and when it is triggered. Guarantors need to understand their full exposure before signing.",
+      "template_clause": "The Guarantor unconditionally and irrevocably guarantees the due and punctual payment of all sums payable by the Borrower under this Agreement. The Guarantor's liability shall be limited to [AMOUNT/percentage] of the outstanding loan amount. The Lender may proceed against the Guarantor without first exhausting remedies against the Borrower, after providing [30] days written notice. The Guarantor's obligations shall terminate upon full repayment of the Loan."
+    }
+  ],
+  "nda": [
+    {
+      "id": "definition_of_confidential",
+      "name": "Definition of Confidential Information",
+      "keywords": ["confidential information", "definition of confidential", "proprietary information", "trade secrets", "classified information", "confidential material", "protected information", "defined as confidential"],
+      "why_matters": "Precisely defines what information is protected under the agreement. A vague definition can either leave important information unprotected or create unreasonable restrictions.",
+      "template_clause": "Confidential Information means any and all information, in any form, disclosed by the Disclosing Party to the Receiving Party, including but not limited to: trade secrets, business plans, financial data, customer lists, technical specifications, software code, algorithms, and any information marked as 'Confidential' or that a reasonable person would understand to be confidential given the nature of the information and circumstances of disclosure."
+    },
+    {
+      "id": "exclusions",
+      "name": "Exclusions from Confidentiality",
+      "keywords": ["exclusions", "exceptions", "not confidential", "publicly available", "independently developed", "prior knowledge", "excluded information", "carve-out"],
+      "why_matters": "Identifies information that is NOT subject to confidentiality obligations. Without clear exclusions, parties may be bound to protect information that is already public.",
+      "template_clause": "Confidential Information shall not include information that: (a) is or becomes publicly available through no fault of the Receiving Party; (b) was already in the Receiving Party's possession prior to disclosure; (c) is independently developed by the Receiving Party without use of the Confidential Information; (d) is received from a third party without breach of any obligation of confidentiality; (e) is required to be disclosed by law, regulation, or court order, provided that the Receiving Party gives prompt notice to the Disclosing Party."
+    },
+    {
+      "id": "duration",
+      "name": "Duration of Obligations",
+      "keywords": ["duration", "term", "period of confidentiality", "years", "expiration", "obligation period", "confidentiality period", "time limit"],
+      "why_matters": "Specifies how long confidentiality obligations last. Perpetual obligations may be unenforceable, while too-short periods may leave information exposed.",
+      "template_clause": "The obligations of confidentiality under this Agreement shall remain in effect for a period of [3/5] years from the date of disclosure of the relevant Confidential Information, unless the information constitutes a trade secret, in which case the obligations shall continue for as long as the information qualifies as a trade secret under applicable law."
+    },
+    {
+      "id": "return_of_materials",
+      "name": "Return of Materials",
+      "keywords": ["return of materials", "destruction", "return or destroy", "return information", "delete copies", "return documents", "material return", "data destruction"],
+      "why_matters": "Requires return or destruction of confidential materials upon termination. Without this, the receiving party may retain and potentially misuse information indefinitely.",
+      "template_clause": "Upon termination of this Agreement or upon written request by the Disclosing Party, the Receiving Party shall promptly return or destroy all Confidential Information, including all copies, notes, summaries, and derivatives. The Receiving Party shall provide written certification of destruction within [15] days. Notwithstanding the foregoing, the Receiving Party may retain copies required by law or regulation, subject to continued confidentiality obligations."
+    },
+    {
+      "id": "injunctive_relief",
+      "name": "Injunctive Relief",
+      "keywords": ["injunctive relief", "specific performance", "equitable relief", "irreparable harm", "court order", "injunction", "emergency relief", "restraining order"],
+      "why_matters": "Acknowledges that monetary damages may be insufficient for breach. This enables the disclosing party to seek immediate court orders to prevent disclosure.",
+      "template_clause": "The parties acknowledge that any breach of this Agreement may cause irreparable harm to the Disclosing Party for which monetary damages would be an inadequate remedy. Accordingly, the Disclosing Party shall be entitled to seek injunctive or other equitable relief in any court of competent jurisdiction, without the necessity of proving actual damages or posting any bond."
+    },
+    {
+      "id": "permitted_disclosure",
+      "name": "Permitted Disclosure",
+      "keywords": ["permitted disclosure", "authorized disclosure", "need to know", "permitted recipients", "authorized persons", "disclose to employees", "share with advisors", "permitted sharing"],
+      "why_matters": "Defines who can access confidential information within the receiving party's organization. Without this, information may spread beyond those who need it.",
+      "template_clause": "The Receiving Party may disclose Confidential Information only to its employees, contractors, and professional advisors who: (a) have a legitimate need to know for the purposes contemplated by this Agreement; (b) are bound by written confidentiality obligations no less restrictive than those herein. The Receiving Party shall be responsible for any breach by its permitted recipients."
+    },
+    {
+      "id": "non_solicitation",
+      "name": "Non-Solicitation",
+      "keywords": ["non-solicitation", "non solicitation", "solicit employees", "hire employees", "recruit", "poach", "solicitation restriction", "no-hire"],
+      "why_matters": "Prevents parties from recruiting each other's employees or clients during and after the NDA period. This protects business relationships disclosed during the engagement.",
+      "template_clause": "During the term of this Agreement and for [12] months thereafter, neither party shall directly or indirectly solicit for employment or engagement any employee or contractor of the other party with whom it had contact in connection with the Purpose. This restriction shall not apply to general job advertisements not targeted at specific individuals."
+    },
+    {
+      "id": "governing_law",
+      "name": "Governing Law",
+      "keywords": ["governing law", "applicable law", "jurisdiction", "governed by", "laws of", "legal framework", "dispute jurisdiction", "courts"],
+      "why_matters": "Determines which jurisdiction's laws apply and where disputes are heard. This significantly affects enforceability and available remedies.",
+      "template_clause": "This Agreement shall be governed by and construed in accordance with the laws of [JURISDICTION], without regard to its conflict of laws principles. Any disputes arising under or in connection with this Agreement shall be subject to the exclusive jurisdiction of the courts at [CITY]."
+    }
+  ],
+  "service_agreement": [
+    {
+      "id": "scope_of_work",
+      "name": "Scope of Work",
+      "keywords": ["scope of work", "services", "deliverables", "scope", "work description", "service description", "tasks", "service scope", "project scope"],
+      "why_matters": "Precisely defines what services will be provided. Without this, scope creep and disputes about what was agreed upon are inevitable.",
+      "template_clause": "The Service Provider shall perform the services described in Annexure A (Scope of Work), which shall include: [detailed list]. Any work not explicitly listed in the Scope of Work shall be considered out of scope and subject to a separate change order with mutually agreed pricing and timeline."
+    },
+    {
+      "id": "payment_terms",
+      "name": "Payment Terms",
+      "keywords": ["payment", "fees", "compensation", "invoicing", "billing", "payment terms", "payment schedule", "remuneration", "charges"],
+      "why_matters": "Defines how much, when, and how payments are made. Clear payment terms prevent cash flow issues and disputes.",
+      "template_clause": "The Client shall pay the Service Provider fees as specified in Annexure B. Invoices shall be submitted [monthly/upon milestone completion] and are payable within [30] days of receipt. Late payments shall accrue interest at [1.5]% per month. The Service Provider reserves the right to suspend services if payment is overdue by more than [15] days."
+    },
+    {
+      "id": "deliverables",
+      "name": "Deliverables",
+      "keywords": ["deliverables", "milestones", "project deliverables", "work product", "outputs", "timeline", "delivery schedule", "submission"],
+      "why_matters": "Specifies tangible outputs and their delivery timeline. Without clear deliverables, it's impossible to measure completion or quality.",
+      "template_clause": "The Service Provider shall deliver the following deliverables per the timeline in Annexure A: [list]. Each deliverable shall be submitted in [format] and shall meet the acceptance criteria specified herein. The Client shall review and provide feedback within [10] business days of submission."
+    },
+    {
+      "id": "warranties",
+      "name": "Warranties",
+      "keywords": ["warranty", "warranties", "guarantee", "quality assurance", "fitness for purpose", "merchantability", "workmanship", "service warranty"],
+      "why_matters": "Provides assurances about the quality and fitness of services. Without warranties, clients have limited recourse for substandard work.",
+      "template_clause": "The Service Provider warrants that: (a) services shall be performed in a professional and workmanlike manner; (b) deliverables shall conform to the specifications in the Scope of Work; (c) services shall not infringe any third-party intellectual property rights. Any defects reported within [90] days of delivery shall be corrected at no additional cost."
+    },
+    {
+      "id": "limitation_of_liability",
+      "name": "Limitation of Liability",
+      "keywords": ["limitation of liability", "liability cap", "maximum liability", "aggregate liability", "consequential damages", "indirect damages", "liability limit", "damages cap"],
+      "why_matters": "Caps the maximum financial exposure for each party. Without this, one party may face disproportionate liability relative to the contract value.",
+      "template_clause": "The aggregate liability of either party under this Agreement shall not exceed the total fees paid or payable under this Agreement in the [12] months preceding the claim. Neither party shall be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or business opportunities, regardless of the theory of liability."
+    },
+    {
+      "id": "intellectual_property",
+      "name": "Intellectual Property",
+      "keywords": ["intellectual property", "IP rights", "ownership", "copyright", "license", "proprietary rights", "work for hire", "IP ownership"],
+      "why_matters": "Determines who owns the work product created under the agreement. IP disputes can be extremely costly if not addressed upfront.",
+      "template_clause": "All intellectual property rights in the deliverables created specifically for the Client under this Agreement shall vest in the Client upon full payment. The Service Provider retains ownership of pre-existing IP, tools, and methodologies, and grants the Client a non-exclusive, perpetual license to use such pre-existing IP as embedded in the deliverables."
+    },
+    {
+      "id": "termination",
+      "name": "Termination",
+      "keywords": ["termination", "cancellation", "end of agreement", "terminate", "early termination", "notice of termination", "contract termination", "exit clause"],
+      "why_matters": "Defines how and when the agreement can be ended. Without clear terms, exiting a poor engagement becomes complicated and expensive.",
+      "template_clause": "Either party may terminate this Agreement: (a) for convenience with [30] days written notice; (b) for cause if the other party materially breaches and fails to cure within [15] days of written notice. Upon termination, the Client shall pay for all services rendered and expenses incurred up to the termination date. The Service Provider shall deliver all completed and in-progress work product."
+    },
+    {
+      "id": "indemnification",
+      "name": "Indemnification",
+      "keywords": ["indemnification", "indemnify", "hold harmless", "defend", "indemnity", "third party claims", "loss and damage", "indemnification obligation"],
+      "why_matters": "Allocates responsibility for third-party claims and losses. One-sided indemnification can create significant financial exposure.",
+      "template_clause": "Each party shall indemnify, defend, and hold harmless the other party from and against any third-party claims, losses, damages, and expenses (including reasonable attorney fees) arising from: (a) the indemnifying party's breach of this Agreement; (b) the indemnifying party's negligence or willful misconduct; (c) any infringement of third-party intellectual property rights by the indemnifying party's work product."
+    },
+    {
+      "id": "force_majeure",
+      "name": "Force Majeure",
+      "keywords": ["force majeure", "act of god", "natural disaster", "pandemic", "unforeseeable", "beyond control", "extraordinary circumstances", "impossibility"],
+      "why_matters": "Excuses performance during extraordinary events beyond either party's control. Without this, parties may be held in breach during crises.",
+      "template_clause": "Neither party shall be liable for any delay or failure in performance resulting from causes beyond its reasonable control, including acts of God, natural disasters, war, terrorism, pandemic, government actions, or failures of third-party telecommunications or power supply. The affected party shall notify the other party within [5] business days and use commercially reasonable efforts to resume performance."
+    },
+    {
+      "id": "data_protection",
+      "name": "Data Protection",
+      "keywords": ["data protection", "privacy", "personal data", "GDPR", "data processing", "data security", "data breach", "data controller", "data privacy"],
+      "why_matters": "Ensures compliance with data protection laws when handling personal data. Non-compliance can result in significant fines and reputational damage.",
+      "template_clause": "The Service Provider shall process personal data only in accordance with the Client's instructions and applicable data protection laws. The Service Provider shall implement appropriate technical and organizational measures to protect personal data against unauthorized access, loss, or destruction. In the event of a data breach, the Service Provider shall notify the Client within [24/72] hours and cooperate fully in remediation efforts."
+    }
+  ],
+  "insurance_policy": [
+    {
+      "id": "coverage_scope",
+      "name": "Coverage Scope",
+      "keywords": ["coverage", "insured risks", "scope of coverage", "covered events", "insured perils", "protection", "coverage scope", "what is covered"],
+      "why_matters": "Defines exactly what risks and events are covered by the policy. Without understanding coverage, policyholders may believe they are protected when they are not.",
+      "template_clause": "This Policy covers the Insured against direct loss or damage caused by the following perils: [list of covered perils]. Coverage extends to the insured property described in the Schedule and any additional items endorsed herein. Coverage shall apply within the territorial limits specified in the Schedule."
+    },
+    {
+      "id": "exclusions",
+      "name": "Exclusions",
+      "keywords": ["exclusion", "not covered", "excluded", "exception", "limitations", "exclusion clause", "excluded perils", "policy exclusions"],
+      "why_matters": "Lists specific events, conditions, or circumstances NOT covered by the policy. Understanding exclusions is critical to knowing the true extent of protection.",
+      "template_clause": "This Policy does not cover loss or damage arising from: (a) war, invasion, or nuclear events; (b) intentional acts or willful misconduct by the Insured; (c) wear and tear or gradual deterioration; (d) pre-existing conditions known to the Insured and not disclosed; (e) losses occurring outside the policy territory; (f) any other exclusions listed in the Schedule of Exclusions."
+    },
+    {
+      "id": "premium_terms",
+      "name": "Premium Terms",
+      "keywords": ["premium", "premium payment", "premium amount", "installment", "premium due date", "payment of premium", "premium schedule", "insurance premium"],
+      "why_matters": "Specifies when and how insurance premiums must be paid. Late or missed premiums can void coverage entirely.",
+      "template_clause": "The Insured shall pay the premium of [AMOUNT] as specified in the Schedule. Premium may be paid in [annual/semi-annual/quarterly/monthly] installments. The premium is due on [DATE] and must be received within [30] days of the due date. Failure to pay premiums within the grace period shall result in automatic lapse of coverage."
+    },
+    {
+      "id": "claims_procedure",
+      "name": "Claims Procedure",
+      "keywords": ["claims", "claim procedure", "file a claim", "claim notification", "claims process", "report a claim", "claim submission", "loss notification"],
+      "why_matters": "Outlines the steps to file a claim and required documentation. Failure to follow proper procedures can result in claim denial.",
+      "template_clause": "The Insured shall: (a) notify the Insurer of any loss or damage within [24/48/72] hours of discovery; (b) submit a written claim with supporting documentation within [30] days; (c) take all reasonable steps to minimize the loss; (d) cooperate fully with the Insurer's investigation. The Insurer shall acknowledge receipt within [5] business days and settle or deny the claim within [30] days of receiving complete documentation."
+    },
+    {
+      "id": "deductible",
+      "name": "Deductible",
+      "keywords": ["deductible", "excess", "co-pay", "self-insured retention", "deductible amount", "policy excess", "first loss", "out-of-pocket"],
+      "why_matters": "Specifies the amount the insured must pay out-of-pocket before coverage kicks in. Higher deductibles reduce premiums but increase immediate financial burden.",
+      "template_clause": "The Insured shall bear a deductible of [AMOUNT] per claim or [PERCENTAGE]% of the claim amount, whichever is [higher/lower], as specified in the Schedule. The deductible shall be applied before the Insurer's liability is calculated. No claim shall be payable if the loss is below the deductible amount."
+    },
+    {
+      "id": "policy_period",
+      "name": "Policy Period",
+      "keywords": ["policy period", "coverage period", "effective date", "expiry date", "term of policy", "inception date", "policy duration", "validity period"],
+      "why_matters": "Defines when coverage begins and ends. Events outside this period are not covered regardless of premium payment.",
+      "template_clause": "This Policy is effective from [START DATE] at 12:01 AM to [END DATE] at 11:59 PM, local standard time at the address of the Insured as stated in the Schedule. Coverage applies only to losses occurring during the policy period. The Insured must report claims for events during the policy period even if reported after expiry."
+    },
+    {
+      "id": "cancellation",
+      "name": "Cancellation",
+      "keywords": ["cancellation", "cancel the policy", "policy cancellation", "termination of policy", "surrender", "cancellation refund", "cancel coverage", "withdrawal"],
+      "why_matters": "Defines how either party can cancel the policy and any refund due. Understanding cancellation terms prevents loss of coverage without adequate alternative.",
+      "template_clause": "The Insured may cancel this Policy at any time by providing written notice to the Insurer. The Insurer may cancel with [15/30] days written notice for non-payment of premium or [60] days notice for other reasons. Upon cancellation, the Insurer shall refund the pro-rata unearned premium less any applicable cancellation charges. Claims arising from events before cancellation remain payable."
+    },
+    {
+      "id": "subrogation",
+      "name": "Subrogation",
+      "keywords": ["subrogation", "right of recovery", "transfer of rights", "subrogation rights", "recovery", "right to pursue", "step into shoes", "subrogation clause"],
+      "why_matters": "Allows the insurer to pursue third parties responsible for a loss after paying a claim. Understanding this prevents the insured from inadvertently waiving recovery rights.",
+      "template_clause": "Upon payment of a claim, the Insurer shall be subrogated to all rights of recovery of the Insured against any third party responsible for the loss. The Insured shall cooperate fully with the Insurer in exercising subrogation rights and shall not take any action that prejudices the Insurer's rights. Any amounts recovered through subrogation shall first reimburse the Insurer's payment, then the Insured's deductible."
+    },
+    {
+      "id": "dispute_resolution",
+      "name": "Dispute Resolution",
+      "keywords": ["dispute", "arbitration", "mediation", "complaint", "grievance", "dispute resolution", "ombudsman", "dispute mechanism"],
+      "why_matters": "Establishes how disagreements about claims or coverage are resolved. This affects the speed and cost of resolving disputes.",
+      "template_clause": "Any dispute arising under this Policy shall first be referred to the Insurer's internal grievance officer for resolution within [15] business days. If unresolved, the dispute may be referred to the Insurance Ombudsman or submitted to arbitration under applicable arbitration laws. The venue for arbitration shall be [CITY] and the decision shall be binding on both parties."
+    },
+    {
+      "id": "renewal_terms",
+      "name": "Renewal Terms",
+      "keywords": ["renewal", "policy renewal", "auto-renewal", "renewal notice", "renewal premium", "continuation", "renew the policy", "renewal terms"],
+      "why_matters": "Specifies how the policy is renewed and any changes in terms or premium. Without clarity, policyholders may face coverage gaps or unexpected premium increases.",
+      "template_clause": "This Policy may be renewed for successive terms of [1] year each upon mutual agreement. The Insurer shall provide a renewal notice at least [30] days before expiry, specifying the renewal premium and any changes in terms. The policy shall not auto-renew without the Insured's written consent. Claims history may affect renewal terms and premium."
+    }
+  ],
+  "partnership_deed": [
+    {
+      "id": "profit_sharing",
+      "name": "Profit Sharing Ratio",
+      "keywords": ["profit sharing", "profit distribution", "loss sharing", "profit ratio", "share of profits", "distribution of earnings", "profit allocation", "income sharing"],
+      "why_matters": "Defines how profits and losses are split among partners. Without this, disputes about fair distribution are inevitable.",
+      "template_clause": "The net profits and losses of the Partnership shall be shared among the Partners in the following ratio: [Partner A: X%, Partner B: Y%]. Profit distribution shall be made [quarterly/annually] after setting aside [X]% for business reserves. No Partner shall draw against anticipated profits without unanimous consent. Losses shall be shared in the same ratio unless otherwise agreed in writing."
+    },
+    {
+      "id": "capital_contribution",
+      "name": "Capital Contribution",
+      "keywords": ["capital contribution", "investment", "capital", "initial contribution", "partner capital", "financial contribution", "capital account", "contributed capital"],
+      "why_matters": "Specifies each partner's financial contribution to the partnership. This determines voting rights, profit shares, and liability in many jurisdictions.",
+      "template_clause": "Each Partner shall contribute to the capital of the Partnership as follows: [Partner A: AMOUNT, Partner B: AMOUNT]. Additional capital contributions may be required upon unanimous agreement of the Partners. Capital shall earn interest at [X]% per annum. No Partner may withdraw their capital contribution without the written consent of all other Partners."
+    },
+    {
+      "id": "decision_making",
+      "name": "Decision Making",
+      "keywords": ["decision making", "voting", "management", "authority", "partner authority", "unanimous consent", "majority vote", "decision authority", "management rights"],
+      "why_matters": "Establishes how business decisions are made and who has authority. Without clear governance, deadlocks and unauthorized actions can harm the partnership.",
+      "template_clause": "Ordinary business decisions shall be made by majority vote of the Partners based on their profit-sharing ratios. The following decisions shall require unanimous consent: (a) borrowing exceeding [AMOUNT]; (b) acquisition or disposal of major assets; (c) admission of new partners; (d) changes to the Partnership Deed; (e) entering contracts exceeding [AMOUNT]. Each Partner may bind the Partnership in ordinary course transactions up to [AMOUNT]."
+    },
+    {
+      "id": "admission_of_partners",
+      "name": "Admission of New Partners",
+      "keywords": ["admission of partners", "new partner", "joining partner", "partnership admission", "adding partners", "additional partner", "partner admission", "new member"],
+      "why_matters": "Defines the process for adding new partners. Without clear terms, existing partners' interests may be diluted without proper consent.",
+      "template_clause": "A new Partner may be admitted to the Partnership only with the unanimous written consent of all existing Partners. The incoming Partner shall contribute capital as agreed and shall execute a supplementary deed specifying their profit-sharing ratio, rights, and obligations. The existing Partners' ratios shall be adjusted proportionally unless otherwise agreed."
+    },
+    {
+      "id": "retirement",
+      "name": "Retirement of Partners",
+      "keywords": ["retirement", "withdrawal", "exit", "retiring partner", "partner exit", "voluntary withdrawal", "retirement of partner", "leaving partner"],
+      "why_matters": "Defines how a partner can exit the partnership and how their share is settled. Without this, departing partners may face delays in receiving their dues.",
+      "template_clause": "Any Partner may retire from the Partnership by giving [6] months written notice to all other Partners. Upon retirement, the retiring Partner shall be entitled to: (a) their capital account balance; (b) their share of undistributed profits; (c) a fair value for goodwill as determined by an independent valuer. Payment shall be made within [90] days of the effective retirement date, or in installments as mutually agreed."
+    },
+    {
+      "id": "dissolution",
+      "name": "Dissolution",
+      "keywords": ["dissolution", "winding up", "dissolve", "closing the business", "partnership dissolution", "termination of partnership", "liquidation", "end of partnership"],
+      "why_matters": "Specifies conditions under which the partnership ends and how assets are distributed. Without clear dissolution terms, the process can become contentious and lengthy.",
+      "template_clause": "The Partnership shall be dissolved upon: (a) unanimous agreement of all Partners; (b) the number of Partners falling below two; (c) court order; (d) illegality of the business. Upon dissolution, the affairs shall be wound up by a mutually appointed liquidator. Assets shall be applied first to discharge debts, then to repay capital contributions, and finally to distribute any surplus in the profit-sharing ratio."
+    },
+    {
+      "id": "non_compete",
+      "name": "Non-Compete",
+      "keywords": ["non-compete", "competing business", "restrictive covenant", "competition", "similar business", "non-competition", "competitive activity", "conflict of interest"],
+      "why_matters": "Prevents partners from engaging in competing businesses. Without this, partners could divert business opportunities for personal gain.",
+      "template_clause": "During the term of the Partnership and for [12/24] months after retirement or dissolution, no Partner shall directly or indirectly engage in, own, manage, or participate in any business that competes with the Partnership within [geographic area]. This restriction shall not prevent a Partner from holding less than [5]% equity in a publicly listed company."
+    },
+    {
+      "id": "dispute_resolution",
+      "name": "Dispute Resolution",
+      "keywords": ["dispute resolution", "arbitration", "mediation", "partner disputes", "conflict resolution", "disagreement", "dispute mechanism", "partner disagreement"],
+      "why_matters": "Provides a mechanism for resolving disagreements between partners. Without this, disputes can paralyze the business or lead to expensive litigation.",
+      "template_clause": "Any dispute between Partners arising from or related to this Deed shall be resolved as follows: (1) direct negotiation between the Partners within [15] days; (2) mediation by a mutually agreed mediator within [30] days; (3) binding arbitration under the Arbitration and Conciliation Act, with the venue at [CITY] and costs shared equally. The Partners agree that the arbitration decision shall be final and binding."
+    },
+    {
+      "id": "accounts_audit",
+      "name": "Accounts and Audit",
+      "keywords": ["accounts", "audit", "financial records", "bookkeeping", "annual accounts", "auditor", "financial statements", "accounting records", "balance sheet"],
+      "why_matters": "Ensures proper financial record-keeping and regular audits. Without this, partners cannot verify the accuracy of profit/loss calculations.",
+      "template_clause": "The Partnership shall maintain proper books of account at the principal place of business, accessible to all Partners at all times. Annual financial statements shall be prepared within [90] days of the financial year end and audited by an independent chartered accountant appointed by mutual agreement. Each Partner shall be entitled to appoint a representative to review the accounts at their own expense."
+    },
+    {
+      "id": "death_of_partner",
+      "name": "Death of a Partner",
+      "keywords": ["death of partner", "deceased partner", "legal heirs", "succession", "partner death", "nominee", "death clause", "surviving partners"],
+      "why_matters": "Addresses what happens to a partner's share upon their death. Without this, the partnership may be forced to dissolve, disrupting the business.",
+      "template_clause": "Upon the death of a Partner, the Partnership shall not be dissolved. The surviving Partners shall have the option to: (a) continue the Partnership and pay the deceased Partner's legal heirs their capital account balance plus a fair value for goodwill within [180] days; or (b) admit a nominee of the deceased Partner as a new Partner with mutual consent. The deceased Partner's share of profits up to the date of death shall be calculated and paid to their legal heirs."
+    }
+  ]
+}

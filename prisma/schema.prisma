@@ -1,0 +1,79 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Document {
+  id          String   @id @default(cuid())
+  fileName    String
+  fileSize    Int
+  blobUrl     String
+  rawText     String   @db.Text
+  docType     String
+  pageCount   Int
+  clauseCount Int
+  fileHash    String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  clauses    Clause[]
+  analyses   Analysis[]
+  shareLinks ShareLink[]
+
+  @@map("documents")
+}
+
+model Clause {
+  id           String  @id @default(cuid())
+  documentId   String
+  document     Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  index        Int
+  text         String  @db.Text
+  category     String?
+  confidence   Float?
+  riskLevel    String?
+  riskScore    Int?
+  riskReason   String? @db.Text
+  explanation  String? @db.Text
+  counterClause String? @db.Text
+  pageNumber   Int?
+  startOffset  Int?
+  endOffset    Int?
+
+  @@map("clauses")
+}
+
+model Analysis {
+  id               String    @id @default(cuid())
+  documentId       String
+  document         Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  status           String    @default("pending")
+  overallScore     Int?
+  summary          String?   @db.Text
+  topThingsToKnow  String?   @db.Text
+  missingClauses   String?   @db.Text
+  negotiationGuide String?   @db.Text
+  stage            String?
+  error            String?   @db.Text
+  createdAt        DateTime  @default(now())
+  completedAt      DateTime?
+
+  @@map("analyses")
+}
+
+model ShareLink {
+  id         String    @id @default(cuid())
+  documentId String
+  document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  shareToken String    @unique
+  isActive   Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+  expiresAt  DateTime?
+
+  @@map("share_links")
+}
