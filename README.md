@@ -5,278 +5,176 @@
 <h1 align="center">LexAI — Legal Document Intelligence</h1>
 
 <p align="center">
-  <strong>Upload any contract. Get a risk report in 30 seconds. Free.</strong>
-</p>
-
-<p align="center">
-  <a href="#live-demo">Live Demo</a> •
-  <a href="#features">Features</a> •
-  <a href="#tech-stack">Tech Stack</a> •
-  <a href="#architecture">Architecture</a> •
-  <a href="#getting-started">Getting Started</a> •
-  <a href="#dataset-citations">Citations</a>
+  <strong>An instant, database-less legal contract analyzer and negotiation playbook system.</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js" alt="Next.js 14" />
   <img src="https://img.shields.io/badge/TypeScript-5.0-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript" />
   <img src="https://img.shields.io/badge/Python-3.12-3776AB?style=for-the-badge&logo=python" alt="Python 3.12" />
-  <img src="https://img.shields.io/badge/Claude-Sonnet-D97706?style=for-the-badge&logo=anthropic" alt="Claude" />
+  <img src="https://img.shields.io/badge/Gemini-1.5_Flash-12B5E5?style=for-the-badge&logo=googlegemini" alt="Google Gemini" />
   <img src="https://img.shields.io/badge/Vercel-Deployed-000?style=for-the-badge&logo=vercel" alt="Vercel" />
-  <img src="https://img.shields.io/badge/TailwindCSS-3.4-06B6D4?style=for-the-badge&logo=tailwindcss" alt="TailwindCSS" />
 </p>
 
 ---
 
-## 🎯 Live Demo
+## 🏛️ System Philosophy: 100% Database-less & State-free
 
-> **[→ Try LexAI Live](https://lexai.vercel.app)** *(Deploy your own instance — see [Getting Started](#getting-started))*
+Traditional document intelligence systems rely heavily on expensive databases, object storage, and memory caches to store parsed contract segments and analysis statuses. This introduces latency, database pricing bottlenecks, and security compliance risks (storing sensitive contract documents on external servers).
 
----
-
-## 🌟 Real-World Impact
-
-> **200M+ Indians sign contracts they don't fully understand every year.** Tenants sign rental agreements with hidden clauses. Freelancers accept service agreements with unlimited liability. Employees overlook non-compete restrictions that limit their careers.
->
-> **LexAI democratizes legal document understanding.** No expensive lawyers needed — just upload your contract and get an instant, AI-powered analysis in plain English.
+**LexAI operates on a clean, in-flight, database-less execution model:**
+1. **Zero Server Retention:** The backend never stores uploaded files or analysis outputs. PDF contracts are parsed, analyzed, and synthesized in a single, synchronous, serverless request.
+2. **Client-Owned Memory:** The completed report JSON is stored exclusively in the browser's `sessionStorage` or client-side application state.
+3. **Stateless URL Sharing:** Public analysis sharing is achieved via **client-side GZIP compression**. When a user clicks "Share", the entire analysis JSON is compressed in the browser using the native `CompressionStream` API, encoded into a compact `base64url` token, and appended as a URL hash. When opened, the recipient's browser decompresses it in-memory via `DecompressionStream`. This guarantees lifetime link sharing with zero database costs.
 
 ---
 
-## ✨ Features
-
-| Feature | Description |
-|---------|-------------|
-| 📄 **Smart Document Parsing** | Upload any PDF contract — PyMuPDF extracts text preserving structure |
-| 🔍 **AI Document Classification** | Automatically detects document type (rental, employment, NDA, etc.) |
-| ⚠️ **Risk Flag Detection** | ML + rules engine identifies risky clauses with severity scoring |
-| 📋 **Missing Clause Detection** | Finds standard clauses that are absent from your contract |
-| 💡 **Plain English Explanations** | Claude AI explains every risky clause in simple language |
-| 🤝 **Negotiation Guide** | Get counter-clauses and suggested wording to push back |
-| 📊 **Visual Risk Dashboard** | Interactive gauge charts, risk distribution, and document viewer |
-| 💬 **Ask Questions** | Chat with AI about any aspect of your document |
-| 🔄 **Contract Comparison** | Upload two versions — see what changed and whether it's better or worse |
-| 🌐 **Multi-Language** | Translate analysis to Tamil, Hindi, and Telugu |
-| 🔗 **Shareable Analysis** | Generate public links to share with lawyers or advisors |
-| 📥 **Negotiation PDF** | Download a formatted negotiation cheat sheet |
-
----
-
-## 🏗️ Architecture
+## 🏗️ Technical Architecture & Data Flow
 
 ```mermaid
-graph TB
-    subgraph Client ["Frontend (Next.js 14)"]
-        A["📄 PDF Upload"] --> B["Landing Page"]
-        B --> C["Analysis Dashboard"]
-        C --> D["Document Viewer"]
-        C --> E["Risk Flags"]
-        C --> F["Missing Clauses"]
-        C --> G["Negotiation Guide"]
-        C --> H["💬 Chat"]
+graph TD
+    User([User's Browser])
+    NextProxy[Next.js App Router]
+    PyGateway[Vercel Serverless Gateway]
+    HF[HuggingFace Inference API]
+    Gemini[Google Gemini API]
+
+    User -->|1. Upload PDF| NextProxy
+    NextProxy -->|Proxy Rewrite| PyGateway
+    
+    PyGateway -->|2. Extract Text & Structure| PyGateway
+    PyGateway -->|3. BART-Large Classification| HF
+    PyGateway -->|4. Risk Rules Scoring Engine| PyGateway
+    PyGateway -->|5. JSON Synthesis| Gemini
+    PyGateway -->|6. Return complete results JSON| User
+    
+    User -->|7. Hydrate dashboard & sessionStorage| User
+    
+    subgraph Sharing Viewport
+        User -->|Click Share| Zip[Browser CompressionStream]
+        Zip -->|base64url Hash URL| Link[Shareable URL /share/token]
+        Link -->|DecompressionStream| Render[Instant Recipient Dashboard]
     end
-
-    subgraph API ["Python Serverless (Vercel)"]
-        I["POST /api/parse-document"] --> J["PyMuPDF Parser"]
-        J --> K["Doc Classifier<br/>(BART-MNLI)"]
-        J --> L["Clause Splitter"]
-        
-        M["POST /api/analyze"] --> N["Clause Classifier<br/>(Legal-BERT)"]
-        N --> O["Risk Scorer<br/>(ML + Rules)"]
-        O --> P["Missing Clause<br/>Detector"]
-        P --> Q["Claude Synthesis<br/>(Sonnet)"]
-    end
-
-    subgraph Storage ["Data Layer"]
-        R["Vercel Blob<br/>(PDF Storage)"]
-        S["Vercel Postgres<br/>(Documents, Clauses)"]
-        T["Upstash Redis<br/>(Cache, Rate Limit)"]
-    end
-
-    subgraph External ["External APIs"]
-        U["HuggingFace<br/>Inference API"]
-        V["Anthropic<br/>Claude API"]
-        W["LibreTranslate<br/>API"]
-    end
-
-    A --> I
-    C --> M
-    I --> R
-    I --> S
-    M --> T
-    K --> U
-    N --> U
-    Q --> V
-    H --> V
-
-    style Client fill:#1e1b4b,color:#fff,stroke:#6366f1
-    style API fill:#0f172a,color:#fff,stroke:#059669
-    style Storage fill:#1a0f2e,color:#fff,stroke:#8b5cf6
-    style External fill:#0c0a1d,color:#fff,stroke:#f59e0b
 ```
 
-### Data Flow
-
-```
-PDF Upload → PyMuPDF Parse → BART-MNLI Classify → Clause Split
-    → Legal-BERT Classify Each Clause → Risk Score (ML + Rules)
-    → Detect Missing Clauses → Claude Synthesize Analysis
-    → Cache in Redis → Render in Dashboard
-```
+### The In-flight Pipeline
+1. **Ingestion & Extraction (`api/parse_document.py`):** Uses **PyMuPDF** to extract raw text and structural components (headers, page indices) directly from the uploaded binary stream in memory.
+2. **Document Classification (`api/lib/doc_classifier.py`):** Passes the initial contract pages to a HuggingFace-hosted **BART-Large-MNLI** zero-shot model to classify the document type (e.g., `rental_agreement`, `employment_contract`, `nda`).
+3. **Clause Extraction & Segmentation (`api/lib/clause_splitter.py`):** Employs precise regular expression patterns to split the raw text into distinct, logical clauses.
+4. **Risk Scoring Engine (`api/lib/risk_scorer.py`):** Evaluates every clause against custom legal heuristics (notice requirements, liability waivers, unilateral amendments) to assign a risk rating (Critical, High, Medium, Low) and calculate a weighted risk score.
+5. **Generative AI Synthesis (`api/lib/llm_synthesis.py`):** The top 10 riskiest clauses are submitted to the **Google Gemini API** (`gemini-1.5-flash`) using structured JSON outputs to generate plain-English explanations, counter-clause pushbacks, and a customized negotiation guide in one final execution.
 
 ---
 
-## 🛠️ Tech Stack
+## ⚡ Key Features
 
-### Frontend
-- **Framework:** Next.js 14 (App Router, Server Components)
-- **Language:** TypeScript 5
-- **Styling:** TailwindCSS 3.4 (custom dark theme, glassmorphism)
-- **Animations:** Motion 12 (formerly Framer Motion)
-- **Charts:** Recharts 3 (custom gauge, risk distribution)
-- **PDF Viewer:** react-pdf 10 (PDF.js 5)
-- **Icons:** Lucide React
+* **Interactive Risk Dashboard:** High-fidelity custom gauge charts, document visualizers, and categorized tabs detailing risk flags and missing critical clauses.
+* **In-Flight Document RAG (`api/chat.py`):** Ask questions about the contract. The client transmits the question, chat history, and the full parsed clause list back to the server. The server performs a lightweight in-memory vector match to inject context directly into Gemini's prompt.
+* **Side-by-Side Draft Comparison (`api/compare.py`):** Upload a revised contract to compare modifications side-by-side. The model highlights additions, removals, and evaluates if each change is better, worse, or neutral for your signing position.
+* **Vernacular Legal Translator (`api/translate.py`):** Seamless legal translation into major Indian languages (Hindi, Tamil, Telugu) with high-fidelity contextual accuracy.
+* **Stateless PDF Exporter (`app/api/negotiation-pdf`):** Generates a print-ready, professional PDF negotiation guide directly from client-supplied state.
 
-### Backend
-- **Serverless Functions:** Python 3.12 on Vercel
-- **PDF Parsing:** PyMuPDF (fitz)
-- **LLM:** Anthropic Claude Sonnet via `anthropic` SDK
-- **NLP:** HuggingFace Inference API (BART-MNLI, Legal-BERT)
-- **Framework:** LangChain (for structured prompts)
+---
 
-### Infrastructure
-- **Database:** Vercel Postgres (via Prisma ORM)
-- **Cache:** Upstash Redis (24hr TTL, rate limiting)
-- **Storage:** Vercel Blob (PDF files)
-- **Deploy:** Vercel (Edge + Serverless)
+## 🛠️ Technology Stack
+
+### Frontend Client
+* **Framework:** Next.js 14 (App Router, Server Components)
+* **Language:** TypeScript 5
+* **Styling:** Vanilla CSS + TailwindCSS 3.4 (premium glassmorphic dark-theme)
+* **Animations:** Motion 12 (Framer Motion)
+* **Visualizations:** Recharts 3 (Gauge and distribution charts)
+* **Document Rendering:** react-pdf 10 (Dynamic SSR-free PDF.js integration)
+
+### Backend API
+* **Runtime:** Python 3.12 (Vercel Serverless Functions)
+* **PDF Engine:** PyMuPDF (fitz)
+* **AI Core:** Google Gemini SDK (`google-generativeai`)
+* **NLP Models:** HuggingFace Inference API (BART-Large-MNLI)
+
+---
+
+## 📁 Directory Structure
+
+```
+LexAI/
+├── api/                    # Python Serverless API Stack
+│   ├── parse_document.py   # Synchronous PDF ingestion pipeline
+│   ├── chat.py             # Client-passed RAG chatbot Q&A
+│   ├── compare.py          # Side-by-side draft comparison
+│   ├── translate.py        # Indian language translator (HI, TA, TE)
+│   └── lib/                # Core analytical modules
+│       ├── doc_classifier.py     # BART-MNLI document type predictor
+│       ├── clause_splitter.py    # Regex structural tokenizer
+│       ├── risk_scorer.py        # Legal-BERT & rules heuristic grader
+│       ├── missing_clauses.py    # Required standard clause scanner
+│       ├── llm_synthesis.py      # Gemini API synthesis controller
+│       └── standard_clauses.json # Golden-standard legal metrics reference
+├── src/                    # Next.js App Router Client
+│   ├── app/                # Page route layouts
+│   ├── components/         # High-fidelity dashboard widgets
+│   ├── hooks/              # Session storage and API integration wrappers
+│   ├── lib/                # API client models and TypeScript definitions
+│   └── styles/             # Global variables and typography
+├── requirements.txt        # Lightweight backend dependencies
+├── vercel.json             # Serverless routing and compilation settings
+└── package.json            # Node.js dependencies
+```
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-- Node.js 18+
-- Python 3.12+
-- npm or yarn
-- Vercel account
+### Local Setup
 
-### 1. Clone & Install
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/lakshminarasimmann/lex-ai.git
+   cd lex-ai
+   ```
 
-```bash
-git clone https://github.com/yourusername/lexai.git
-cd lexai
-npm install
-```
+2. **Install Node.js dependencies:**
+   ```bash
+   npm install
+   ```
 
-### 2. Environment Variables
+3. **Configure Environment Variables:**
+   Create a `.env.local` file in your root directory:
+   ```env
+   GEMINI_API_KEY=AIzaSyYourGeminiApiKey
+   HUGGINGFACE_API_KEY=hf_YourHuggingFaceToken
+   ```
 
-```bash
-cp .env.example .env.local
-```
-
-Fill in your API keys:
-- `GEMINI_API_KEY` — [Get free key from Google AI Studio](https://aistudio.google.com/)
-- `HUGGINGFACE_API_KEY` — [Get from HuggingFace](https://huggingface.co/settings/tokens)
-
-### 3. Database Setup
-
-```bash
-npx prisma db push
-```
-
-### 4. Run Locally
-
-```bash
-npm run dev
-```
-
-Visit [http://localhost:3000](http://localhost:3000)
-
-### 5. Deploy to Vercel
-
-```bash
-npx vercel deploy --prod
-```
+4. **Launch the Development Server:**
+   ```bash
+   npm run dev
+   ```
+   Open your browser to [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## 📊 Performance Benchmarks
+## 🌐 Production Deployment to Vercel
 
-| Metric | Value |
-|--------|-------|
-| **Document Parse Time** | ~2-3 seconds |
-| **Full Analysis Pipeline** | ~15-30 seconds |
-| **Classification Accuracy** | ~85% (BART-MNLI zero-shot) |
-| **Risk Detection Precision** | ~90% (ML + rules hybrid) |
-| **Cold Start (Python)** | ~3-5 seconds |
-| **Warm Invocation** | ~500ms |
+Since the application is database-less, deploying online requires only linking the repository and providing the API keys.
 
----
-
-## 📚 Dataset Citations
-
-### CUAD (Contract Understanding Atticus Dataset)
-- **Paper:** Hendrycks et al., "CUAD: An Expert-Annotated NLP Dataset for Legal Contract Review" (NeurIPS 2021)
-- **License:** CC BY 4.0
-- **Source:** [HuggingFace: theatticusproject/cuad](https://huggingface.co/datasets/theatticusproject/cuad)
-- **Details:** 510 contracts, 13,000+ annotations, 41 clause categories
-
-### Legal-BERT
-- **Paper:** Chalkidis et al., "LEGAL-BERT: The Muppets straight out of Law School" (EMNLP 2020)
-- **Model:** [HuggingFace: nlpaueb/legal-bert-base-uncased](https://huggingface.co/nlpaueb/legal-bert-base-uncased)
-- **Pre-trained on:** 12GB of diverse English legal text
-
-### BART-MNLI
-- **Model:** [HuggingFace: facebook/bart-large-mnli](https://huggingface.co/facebook/bart-large-mnli)
-- **Use:** Zero-shot text classification
+1. **Link your project:**
+   ```bash
+   npx vercel link
+   ```
+2. **Add Environment Variables securely via CLI:**
+   ```bash
+   npx vercel env add GEMINI_API_KEY production
+   npx vercel env add HUGGINGFACE_API_KEY production
+   ```
+3. **Deploy to production:**
+   ```bash
+   npx vercel --prod
+   ```
 
 ---
 
-## 📁 Project Structure
+## 📊 Dataset & Model Citations
 
-```
-LexAI/
-├── api/                    # Python serverless functions
-│   ├── parse_document.py   # PDF ingestion endpoint
-│   ├── analyze.py          # ML analysis pipeline
-│   ├── analysis_status.py  # Status polling
-│   ├── chat.py             # Document Q&A
-│   ├── compare.py          # Contract comparison
-│   ├── share.py            # Share links
-│   ├── translate.py        # Multi-language
-│   └── lib/                # Shared Python modules
-├── src/
-│   ├── app/                # Next.js App Router
-│   ├── components/         # React components
-│   ├── hooks/              # Custom hooks
-│   ├── lib/                # Utilities & types
-│   └── styles/             # Font configuration
-├── prisma/                 # Database schema
-├── public/                 # Static assets
-├── vercel.json             # Deployment config
-└── requirements.txt        # Python dependencies
-```
-
----
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-<p align="center">
-  <strong>Built with ❤️ for the 200M+ Indians who sign contracts they don't understand</strong>
-</p>
-<p align="center">
-  <sub>Powered by AI • Made with Next.js, Python & Claude</sub>
-</p>
+* **BART-Large-MNLI**: Zero-shot text classifier hosted on HuggingFace for lightning-fast document classification.
+* **CUAD (Contract Understanding Atticus Dataset)**: Annotations and mapping logic influenced by the Atticus Project NLP dataset designed for legal contract reviews.
+* **Legal-BERT**: Context-specific legal vocabulary patterns adapted into our custom rules scoring engine.
