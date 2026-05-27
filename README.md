@@ -138,18 +138,12 @@ LexAI/
    npm install
    ```
 
-3. **Configure Environment Variables:**
-   Create a `.env.local` file in your root directory:
-   ```env
-   GEMINI_API_KEY=AIzaSyYourGeminiApiKey
-   HUGGINGFACE_API_KEY=hf_YourHuggingFaceToken
-   ```
 
-4. **Launch the Development Server:**
+3. **Launch the Development Server:**
    ```bash
    npm run dev
    ```
-   Open your browser to [http://localhost:3000](http://localhost:3000).
+ 
 
 ---
 
@@ -162,10 +156,7 @@ Since the application is database-less, deploying online requires only linking t
    npx vercel link
    ```
 2. **Add Environment Variables securely via CLI:**
-   ```bash
-   npx vercel env add GEMINI_API_KEY production
-   npx vercel env add HUGGINGFACE_API_KEY production
-   ```
+  
 3. **Deploy to production:**
    ```bash
    npx vercel --prod
