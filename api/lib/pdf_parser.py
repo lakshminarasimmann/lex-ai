@@ -7,7 +7,10 @@ and heading detection based on font size heuristics.
 
 from typing import Any
 
-import pymupdf  # PyMuPDF >= 1.24 exposes the top-level 'pymupdf' import
+try:
+    import pymupdf
+except ImportError:
+    import fitz as pymupdf
 
 
 def _average_font_size(blocks: list[dict]) -> float:
