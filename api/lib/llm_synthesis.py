@@ -44,8 +44,8 @@ def synthesize_analysis(
 
     genai.configure(api_key=api_key)
 
-    # Take top 10 riskiest clauses
-    top_clauses = risky_clauses[:10]
+    # Take top 3 riskiest clauses to prevent response truncation
+    top_clauses = risky_clauses[:3]
 
     # Format clauses for the prompt
     clause_block = ""
@@ -65,16 +65,16 @@ def synthesize_analysis(
 {clause_block}
 
 For each clause provide:
-1. A plain English explanation in 2 sentences that anyone can understand
-2. Why this clause may disadvantage the signing party
-3. A specific suggested counter-clause or negotiation point
+1. A brief plain English explanation in exactly 1 sentence
+2. Why this clause may disadvantage the signing party in exactly 1 sentence
+3. A specific suggested counter-clause or negotiation point in exactly 1 sentence
 
 Also provide:
 - A 3-sentence overall summary of what this document is about
 - Top 3 things the signer should know before signing
 - A negotiation guide with:
-  - Top 5 clauses to push back on with exact suggested wording
-  - 5 Dos and 5 Don'ts for negotiating this type of document
+  - Top 3 clauses to push back on with exact suggested wording
+  - 3 Dos and 3 Don'ts for negotiating this type of document
   - Standard market terms for key metrics
 
 Format your ENTIRE response as a JSON object with this exact structure:
