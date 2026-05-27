@@ -36,6 +36,8 @@ def synthesize_analysis(
         - ``negotiation_guide``: structured negotiation advice.
 
     Raises:
+        RuntimeError: If ``GEMINI_API_KEY`` is not set.
+    """
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY environment variable is not set")
