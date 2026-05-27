@@ -81,7 +81,10 @@ class handler(BaseHTTPRequestHandler):
                 )
             )
 
-            response_text = resp.text.strip() if resp.text else "{}"
+            try:
+                response_text = resp.text.strip() if resp.text else "{}"
+            except Exception:
+                response_text = "{}"
             
             # Clean up response markdown block wrappers if present
             if response_text.startswith("```json"):

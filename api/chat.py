@@ -117,7 +117,10 @@ class handler(BaseHTTPRequestHandler):
                 generation_config=genai.GenerationConfig(max_output_tokens=1000)
             )
 
-            response_content = resp.text if resp.text else "I apologize, but I could not formulate an answer."
+            try:
+                response_content = resp.text if resp.text else "I apologize, but I could not formulate an answer."
+            except Exception:
+                response_content = "I apologize, but I could not formulate an answer. The response may have been flagged or was invalid."
 
             return self._json(200, {
                 "reply": response_content

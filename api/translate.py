@@ -75,7 +75,10 @@ class handler(BaseHTTPRequestHandler):
                 generation_config=genai.GenerationConfig(max_output_tokens=1000)
             )
 
-            translated_text = resp.text.strip() if resp.text else ""
+            try:
+                translated_text = resp.text.strip() if resp.text else ""
+            except Exception:
+                translated_text = "Translation is temporarily unavailable due to content safety flags."
 
             return self._json(200, {
                 "translated_text": translated_text,
