@@ -36,6 +36,12 @@ export function useUpload() {
       
       // Store complete report JSON in client's sessionStorage
       if (data && data.document && data.document.id) {
+        try {
+          const localUrl = URL.createObjectURL(selectedFile);
+          data.document.blobUrl = localUrl;
+        } catch (e) {
+          console.warn('Failed to create local object URL:', e);
+        }
         sessionStorage.setItem(`lexai-report-${data.document.id}`, JSON.stringify(data));
       }
       

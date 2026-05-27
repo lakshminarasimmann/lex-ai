@@ -94,7 +94,7 @@ Return ONLY the JSON object, no other text."""
 
     try:
         model = genai.GenerativeModel(
-            model_name="gemini-1.5-flash",
+            model_name="gemini-2.5-flash",
             system_instruction="You are a senior legal analyst. You provide clear, accurate legal analysis in JSON format. Always respond with valid JSON only."
         )
         response = model.generate_content(
