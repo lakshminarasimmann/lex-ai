@@ -11,14 +11,15 @@ interface StaggerChildrenProps {
 
 export default function StaggerChildren({
   children,
-  staggerDelay = 0.08,
+  staggerDelay = 0.06,
   className,
 }: StaggerChildrenProps) {
   return (
     <AnimatePresence mode="wait">
       <motion.div
         initial="hidden"
-        animate="visible"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-30px' }}
         exit="hidden"
         variants={{
           visible: {
@@ -34,13 +35,13 @@ export default function StaggerChildren({
           <motion.div
             key={index}
             variants={{
-              hidden: { opacity: 0, y: 20, scale: 0.97 },
+              hidden: { opacity: 0, y: 16, scale: 0.98 },
               visible: {
                 opacity: 1,
                 y: 0,
                 scale: 1,
                 transition: {
-                  duration: 0.4,
+                  duration: 0.35,
                   ease: [0.25, 0.4, 0.25, 1],
                 },
               },

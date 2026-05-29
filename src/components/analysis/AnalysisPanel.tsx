@@ -26,9 +26,13 @@ export default function AnalysisPanel({ results, onSelectClause }: AnalysisPanel
   ];
 
   return (
-    <Card className="flex flex-col h-full border-[rgba(255,255,255,0.06)] bg-[#0c0c16]/50 backdrop-blur-md p-6">
+    <Card 
+      variant="command" 
+      className="flex flex-col h-full p-5"
+      padding="none"
+    >
       {/* Tab Switcher */}
-      <div className="mb-4">
+      <div className="mb-4 px-1">
         <Tabs 
           tabs={tabs} 
           activeTab={activeTab} 
@@ -37,7 +41,7 @@ export default function AnalysisPanel({ results, onSelectClause }: AnalysisPanel
       </div>
 
       {/* Tab Content Panels */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden px-1">
         {activeTab === 'summary' && <SummaryTab results={results} />}
         {activeTab === 'risks' && (
           <RiskFlagsTab 

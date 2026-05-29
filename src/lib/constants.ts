@@ -15,13 +15,13 @@ export const DOC_TYPE_LABELS: Record<DocumentType, string> = {
 };
 
 export const DOC_TYPE_COLORS: Record<DocumentType, string> = {
-  rental_agreement: 'from-blue-500 to-cyan-500',
-  employment_contract: 'from-purple-500 to-pink-500',
-  loan_agreement: 'from-amber-500 to-orange-500',
-  nda: 'from-emerald-500 to-teal-500',
-  service_agreement: 'from-indigo-500 to-violet-500',
-  insurance_policy: 'from-rose-500 to-red-500',
-  partnership_deed: 'from-sky-500 to-blue-500',
+  rental_agreement: 'from-[#3B82F6] to-[#1E40AF]',
+  employment_contract: 'from-[#7C3AED] to-[#5B21B6]',
+  loan_agreement: 'from-[#D4AF37] to-[#B8860B]',
+  nda: 'from-[#10B981] to-[#047857]',
+  service_agreement: 'from-[#3B82F6] to-[#7C3AED]',
+  insurance_policy: 'from-[#EF4444] to-[#B91C1C]',
+  partnership_deed: 'from-[#D4AF37] to-[#92700C]',
 };
 
 export const DOC_TYPE_ICONS: Record<DocumentType, string> = {
@@ -39,17 +39,17 @@ export const DOC_TYPE_ICONS: Record<DocumentType, string> = {
 // ============================================
 
 export const RISK_LEVEL_COLORS: Record<RiskLevel, string> = {
-  low: '#10b981',
-  medium: '#f59e0b',
+  low: '#10B981',
+  medium: '#F59E0B',
   high: '#f97316',
-  critical: '#ef4444',
+  critical: '#EF4444',
 };
 
 export const RISK_LEVEL_BG_COLORS: Record<RiskLevel, string> = {
-  low: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  medium: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  high: 'bg-orange-500/10 text-orange-400 border-orange-500/20',
-  critical: 'bg-red-500/10 text-red-400 border-red-500/20',
+  low: 'bg-[rgba(16,185,129,0.1)] text-[#10B981] border-[rgba(16,185,129,0.2)]',
+  medium: 'bg-[rgba(245,158,11,0.1)] text-[#F59E0B] border-[rgba(245,158,11,0.2)]',
+  high: 'bg-[rgba(249,115,22,0.1)] text-[#f97316] border-[rgba(249,115,22,0.2)]',
+  critical: 'bg-[rgba(239,68,68,0.1)] text-[#EF4444] border-[rgba(239,68,68,0.2)]',
 };
 
 export const RISK_LEVEL_LABELS: Record<RiskLevel, string> = {
@@ -95,18 +95,18 @@ export const SAMPLE_DOCUMENTS: SampleDocument[] = [
 ];
 
 // ============================================
-// Analysis Stages
+// Analysis Stages — AI Legal Investigation Sequence
 // ============================================
 
 export const ANALYSIS_STAGES: Record<string, { label: string; progress: number }> = {
-  uploading: { label: 'Uploading document...', progress: 10 },
-  parsing: { label: 'Parsing document structure...', progress: 25 },
-  extracting: { label: 'Extracting clauses...', progress: 40 },
-  classifying: { label: 'Classifying clause types...', progress: 55 },
-  analyzing: { label: 'Analyzing risk levels...', progress: 70 },
-  generating: { label: 'Generating insights...', progress: 85 },
-  completing: { label: 'Finalizing report...', progress: 95 },
-  completed: { label: 'Analysis complete!', progress: 100 },
+  uploading: { label: 'Ingesting document into AI pipeline...', progress: 10 },
+  parsing: { label: 'Reading document structure...', progress: 20 },
+  extracting: { label: 'Identifying contract type...', progress: 35 },
+  classifying: { label: 'Extracting legal clauses...', progress: 50 },
+  analyzing: { label: 'Evaluating risk levels...', progress: 65 },
+  generating: { label: 'Building negotiation strategy...', progress: 80 },
+  completing: { label: 'Compiling intelligence report...', progress: 95 },
+  completed: { label: 'Analysis complete', progress: 100 },
 };
 
 // ============================================
@@ -114,9 +114,9 @@ export const ANALYSIS_STAGES: Record<string, { label: string; progress: number }
 // ============================================
 
 export const CHAT_SUGGESTIONS = [
-  'What are the key risks in this contract?',
-  'Explain the termination clause',
-  'What clauses are missing?',
-  'Summarize in simple language',
-  'What should I negotiate?',
+  'What are the critical risk factors?',
+  'Explain the termination clause in plain English',
+  'Which clauses are missing from this agreement?',
+  'What should I negotiate before signing?',
+  'Are there any liability concerns?',
 ];

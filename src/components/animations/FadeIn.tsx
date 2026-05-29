@@ -12,17 +12,17 @@ interface FadeInProps {
 }
 
 const directionOffsets = {
-  up: { y: 24, x: 0 },
-  down: { y: -24, x: 0 },
-  left: { x: 24, y: 0 },
-  right: { x: -24, y: 0 },
+  up: { y: 20, x: 0 },
+  down: { y: -20, x: 0 },
+  left: { x: 20, y: 0 },
+  right: { x: -20, y: 0 },
   none: { x: 0, y: 0 },
 };
 
 export default function FadeIn({
   children,
   delay = 0,
-  duration = 0.5,
+  duration = 0.4,
   direction = 'up',
   className,
 }: FadeInProps) {
@@ -31,7 +31,8 @@ export default function FadeIn({
   return (
     <motion.div
       initial={{ opacity: 0, x: offset.x, y: offset.y }}
-      animate={{ opacity: 1, x: 0, y: 0 }}
+      whileInView={{ opacity: 1, x: 0, y: 0 }}
+      viewport={{ once: true, margin: '-50px' }}
       transition={{
         duration,
         delay,

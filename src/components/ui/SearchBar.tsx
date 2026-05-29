@@ -40,12 +40,12 @@ export default function SearchBar({
       className={cn(
         'relative flex items-center rounded-xl border transition-all duration-200',
         isFocused
-          ? 'border-primary-500/40 bg-surface-100 shadow-glow-primary'
-          : 'border-white/8 bg-surface-50 hover:border-white/15',
+          ? 'border-[rgba(212,175,55,0.3)] bg-[#171C25] shadow-[0_0_20px_rgba(212,175,55,0.06)]'
+          : 'border-[rgba(255,255,255,0.08)] bg-[#11151C] hover:border-[rgba(255,255,255,0.12)]',
         className
       )}
     >
-      <Search className="absolute left-3 w-4 h-4 text-slate-500" />
+      <Search className="absolute left-3 w-4 h-4 text-[#667085]" />
       <input
         ref={inputRef}
         type="text"
@@ -54,13 +54,13 @@ export default function SearchBar({
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
-        className="w-full bg-transparent pl-9 pr-8 py-2.5 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none"
+        className="w-full bg-transparent pl-9 pr-8 py-2.5 text-sm text-[#F8FAFC] placeholder:text-[#667085] focus:outline-none"
         aria-label={placeholder}
       />
       {query && (
         <button
           onClick={clear}
-          className="absolute right-2.5 p-0.5 rounded text-slate-500 hover:text-slate-300 transition-colors"
+          className="absolute right-2.5 p-0.5 rounded text-[#667085] hover:text-[#A8B3C7] transition-colors"
           aria-label="Clear search"
         >
           <X className="w-3.5 h-3.5" />

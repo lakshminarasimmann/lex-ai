@@ -4,7 +4,7 @@ import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline' | 'gold';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -17,15 +17,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-primary-600 to-primary-500 text-white shadow-glow-primary hover:from-primary-500 hover:to-primary-400 border-primary-500/30',
+    'bg-[#D4AF37] text-[#090B0F] shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:bg-[#E0C04A] hover:shadow-[0_0_30px_rgba(212,175,55,0.25)] border-[#D4AF37]/30 font-bold',
   secondary:
-    'bg-surface-100 text-slate-200 border-white/10 hover:bg-surface-200 hover:border-white/20',
+    'bg-[#171C25] text-[#A8B3C7] border-[rgba(255,255,255,0.08)] hover:bg-[#1A202B] hover:text-[#F8FAFC] hover:border-[rgba(255,255,255,0.14)]',
   ghost:
-    'bg-transparent text-slate-300 border-transparent hover:bg-surface-100 hover:text-slate-100',
+    'bg-transparent text-[#A8B3C7] border-transparent hover:bg-[rgba(255,255,255,0.04)] hover:text-[#F8FAFC]',
   danger:
-    'bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20 hover:border-red-500/30',
+    'bg-[rgba(239,68,68,0.1)] text-[#EF4444] border-[rgba(239,68,68,0.2)] hover:bg-[rgba(239,68,68,0.15)] hover:border-[rgba(239,68,68,0.3)]',
   outline:
-    'bg-transparent text-slate-200 border-white/10 hover:bg-surface-50 hover:border-white/20',
+    'bg-transparent text-[#A8B3C7] border-[rgba(255,255,255,0.08)] hover:bg-[rgba(255,255,255,0.04)] hover:border-[rgba(255,255,255,0.14)] hover:text-[#F8FAFC]',
+  gold:
+    'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#090B0F] shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:from-[#E0C04A] hover:to-[#D4AF37] border-transparent font-bold',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
@@ -46,12 +48,12 @@ export default function Button({
 }: ButtonProps) {
   return (
     <motion.button
-      whileHover={{ scale: disabled || isLoading ? 1 : 1.02 }}
+      whileHover={{ scale: disabled || isLoading ? 1 : 1.015, y: disabled || isLoading ? 0 : -1 }}
       whileTap={{ scale: disabled || isLoading ? 1 : 0.98 }}
       className={cn(
         'relative inline-flex items-center justify-center font-medium border transition-all duration-200',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0a1a]',
-        'disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D4AF37]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#090B0F]',
+        'disabled:opacity-40 disabled:cursor-not-allowed disabled:pointer-events-none',
         variantStyles[variant],
         sizeStyles[size],
         isLoading && 'cursor-wait',

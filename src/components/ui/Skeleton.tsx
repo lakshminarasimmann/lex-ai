@@ -10,12 +10,7 @@ interface SkeletonProps {
 
 function SkeletonLine({ className }: { className?: string }) {
   return (
-    <div
-      className={cn(
-        'h-4 rounded-md skeleton-shimmer',
-        className
-      )}
-    />
+    <div className={cn('h-4 rounded-md bg-[#171C25] skeleton-shimmer', className)} />
   );
 }
 
@@ -23,10 +18,7 @@ function TextSkeleton({ lines = 3, className }: { lines?: number; className?: st
   return (
     <div className={cn('space-y-3', className)}>
       {Array.from({ length: lines }).map((_, i) => (
-        <SkeletonLine
-          key={i}
-          className={i === lines - 1 ? 'w-2/3' : 'w-full'}
-        />
+        <SkeletonLine key={i} className={i === lines - 1 ? 'w-2/3' : 'w-full'} />
       ))}
     </div>
   );
@@ -34,9 +26,9 @@ function TextSkeleton({ lines = 3, className }: { lines?: number; className?: st
 
 function CardSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn('glass-card p-6 space-y-4', className)}>
+    <div className={cn('bg-[#1A202B] border border-[rgba(255,255,255,0.06)] rounded-xl p-6 space-y-4', className)}>
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl skeleton-shimmer" />
+        <div className="w-10 h-10 rounded-xl bg-[#171C25] skeleton-shimmer" />
         <div className="flex-1 space-y-2">
           <SkeletonLine className="w-1/3 h-5" />
           <SkeletonLine className="w-1/2 h-3" />
@@ -54,7 +46,7 @@ function CardSkeleton({ className }: { className?: string }) {
 function AvatarSkeleton({ className }: { className?: string }) {
   return (
     <div className={cn('flex items-center gap-3', className)}>
-      <div className="w-10 h-10 rounded-full skeleton-shimmer" />
+      <div className="w-10 h-10 rounded-full bg-[#171C25] skeleton-shimmer" />
       <div className="flex-1 space-y-2">
         <SkeletonLine className="w-24 h-4" />
         <SkeletonLine className="w-16 h-3" />
@@ -65,13 +57,13 @@ function AvatarSkeleton({ className }: { className?: string }) {
 
 function ChartSkeleton({ className }: { className?: string }) {
   return (
-    <div className={cn('glass-card p-6', className)}>
+    <div className={cn('bg-[#1A202B] border border-[rgba(255,255,255,0.06)] rounded-xl p-6', className)}>
       <SkeletonLine className="w-32 h-5 mb-4" />
       <div className="flex items-end gap-2 h-32">
         {[40, 65, 45, 80, 55, 70, 50].map((h, i) => (
           <div
             key={i}
-            className="flex-1 rounded-t-md skeleton-shimmer"
+            className="flex-1 rounded-t-md bg-[#171C25] skeleton-shimmer"
             style={{ height: `${h}%` }}
           />
         ))}
@@ -80,19 +72,11 @@ function ChartSkeleton({ className }: { className?: string }) {
   );
 }
 
-export default function Skeleton({
-  variant = 'text',
-  className,
-  lines,
-}: SkeletonProps) {
+export default function Skeleton({ variant = 'text', className, lines }: SkeletonProps) {
   switch (variant) {
-    case 'card':
-      return <CardSkeleton className={className} />;
-    case 'avatar':
-      return <AvatarSkeleton className={className} />;
-    case 'chart':
-      return <ChartSkeleton className={className} />;
-    default:
-      return <TextSkeleton lines={lines} className={className} />;
+    case 'card': return <CardSkeleton className={className} />;
+    case 'avatar': return <AvatarSkeleton className={className} />;
+    case 'chart': return <ChartSkeleton className={className} />;
+    default: return <TextSkeleton lines={lines} className={className} />;
   }
 }

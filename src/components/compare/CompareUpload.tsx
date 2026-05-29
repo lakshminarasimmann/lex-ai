@@ -1,175 +1,186 @@
 'use client';
 
-import React, { useState } from 'react';
-import { GitCompare, Loader2, ArrowRight, Sparkles } from 'lucide-react';
-import Card from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
-import FileUpload from '@/components/ui/FileUpload';
-import { uploadDocument, compareDocuments } from '@/lib/api';
-import DiffViewer from './DiffViewer';
-import { CompareResult, Clause } from '@/lib/types';
-import FadeIn from '@/components/animations/FadeIn';
+import React, { useState, useCallback, useRef } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { FileText, ArrowRight, CheckCircle2, AlertCircle, GitCompare, Shield } from 'lucide-react';
+import { cn, formatFileSize } from '@/lib/utils';
+import { MAX_FILE_SIZE, ACCEPTED_FILE_TYPES } from '@/lib/constants';
 
-export default function CompareUpload() {
-  const [clauses1, setClauses1] = useState<Clause[] | null>(null);
-  const [clauses2, setClauses2] = useState<Clause[] | null>(null);
-  const [name1, setName1] = useState<string | null>(null);
-  const [name2, setName2] = useState<string | null>(null);
+interface CompareUploadProps {
+  onUpload: (files: { file1: File; file2: File }) => void;
+  isLoading?: boolean;
+}
 
-  const [isLoading1, setIsLoading1] = useState(false);
-  const [isLoading2, setIsLoading2] = useState(false);
-  const [isComparing, setIsComparing] = useState(false);
-
-  const [compareResult, setCompareResult] = useState<CompareResult | null>(null);
+export default function CompareUpload({ onUpload, isLoading = false }: CompareUploadProps) {
+  const [file1, setFile1] = useState<File | null>(null);
+  const [file2, setFile2] = useState<File | null>(null);
+  const [activeSlot, setActiveSlot] = useState<1 | 2 | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const handleUpload1 = async (file: File) => {
-    setIsLoading1(true);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleSlotClick = (slot: 1 | 2) => {
+    if (isLoading) return;
+    setActiveSlot(slot);
+    inputRef.current?.click();
+  };
+
+  const validateFile = (file: File): string | null => {
+    if (!ACCEPTED_FILE_TYPES.includes(file.type)) return 'Only PDF files are supported';
+    if (file.size > MAX_FILE_SIZE) return `File must be under ${formatFileSize(MAX_FILE_SIZE)}`;
+    return null;
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !activeSlot) return;
+
+    const validationError = validateFile(file);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setError(null);
-    try {
-      const data = await uploadDocument(file);
-      setClauses1(data.clauses);
-      setName1(file.name);
-    } catch (err: any) {
-      setError(err?.message || 'Failed to upload and parse original contract');
-    } finally {
-      setIsLoading1(false);
+    if (activeSlot === 1) setFile1(file);
+    if (activeSlot === 2) setFile2(file);
+    setActiveSlot(null);
+    e.target.value = ''; // Reset input
+  };
+
+  const handleCompare = () => {
+    if (file1 && file2) {
+      onUpload({ file1, file2 });
     }
   };
 
-  const handleUpload2 = async (file: File) => {
-    setIsLoading2(true);
-    setError(null);
-    try {
-      const data = await uploadDocument(file);
-      setClauses2(data.clauses);
-      setName2(file.name);
-    } catch (err: any) {
-      setError(err?.message || 'Failed to upload and parse revised contract');
-    } finally {
-      setIsLoading2(false);
-    }
-  };
-
-  const handleCompare = async () => {
-    if (!clauses1 || !clauses2) return;
-    setIsComparing(true);
-    setError(null);
-    try {
-      const result = await compareDocuments(clauses1, clauses2);
-      setCompareResult(result);
-    } catch (err: any) {
-      setError(err?.message || 'Comparison failed. Make sure both files have been successfully parsed.');
-    } finally {
-      setIsComparing(false);
-    }
-  };
-
-  const handleReset = () => {
-    setClauses1(null);
-    setClauses2(null);
-    setName1(null);
-    setName2(null);
-    setCompareResult(null);
-    setError(null);
+  const FileSlot = ({ num, file }: { num: 1 | 2; file: File | null }) => {
+    return (
+      <div 
+        onClick={() => handleSlotClick(num)}
+        className={cn(
+          'relative flex flex-col items-center justify-center p-8 rounded-xl border-2 border-dashed transition-all duration-300 cursor-pointer h-[240px]',
+          file 
+            ? 'border-[rgba(16,185,129,0.3)] bg-[rgba(16,185,129,0.05)] shadow-[0_0_20px_rgba(16,185,129,0.1)]'
+            : 'border-[rgba(255,255,255,0.08)] bg-[#11151C] hover:border-[rgba(255,255,255,0.15)] hover:bg-[#1A202B]',
+          isLoading && 'pointer-events-none opacity-50'
+        )}
+      >
+        <AnimatePresence mode="wait">
+          {file ? (
+            <motion.div
+              key="filled"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center gap-3 text-center"
+            >
+              <div className="w-12 h-12 rounded-full bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] flex items-center justify-center">
+                <CheckCircle2 className="w-6 h-6 text-[#10B981]" />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-[#F8FAFC] line-clamp-1 break-all">{file.name}</p>
+                <p className="text-xs text-[#A8B3C7] mt-1">{formatFileSize(file.size)}</p>
+              </div>
+              <span className="text-[10px] font-bold text-[#10B981] uppercase tracking-[0.15em] bg-[rgba(16,185,129,0.1)] px-2 py-1 rounded">
+                Version {num} Ready
+              </span>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="flex flex-col items-center gap-4 text-center"
+            >
+              <div className="w-14 h-14 rounded-xl bg-[#1A202B] border border-[rgba(255,255,255,0.06)] flex items-center justify-center">
+                <FileText className="w-6 h-6 text-[#667085]" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[#F8FAFC]">Upload Version {num}</p>
+                <p className="text-xs text-[#A8B3C7] mt-1">Select PDF document</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
   };
 
   return (
-    <div className="flex flex-col gap-8 w-full max-w-6xl mx-auto my-8 px-4">
-      {/* Side-by-Side Upload Cards */}
-      {!compareResult && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Slot 1: Original */}
-          <FadeIn direction="left">
-            <Card className="p-6 border-[rgba(255,255,255,0.06)] bg-[#0d0d18]/40 backdrop-blur-md flex flex-col gap-4 text-left">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-400">
-                Baseline Agreement
-              </span>
-              <h3 className="text-xl font-bold text-white tracking-wide">1. Original Contract</h3>
-              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                Upload the original, un-edited contract or standard boilerplate version.
-              </p>
-              
-              <div className="mt-2 min-h-[160px] flex items-center justify-center border border-dashed border-[rgba(255,255,255,0.08)] bg-black/20 rounded-xl p-4">
-                {name1 ? (
-                  <div className="flex flex-col items-center text-center gap-2 p-4">
-                    <span className="text-xs font-bold text-slate-200 truncate max-w-[200px]">{name1}</span>
-                    <span className="text-[10px] text-emerald-400 font-extrabold uppercase tracking-widest bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded">✓ Parsed</span>
-                  </div>
-                ) : (
-                  <FileUpload onUpload={handleUpload1} isLoading={isLoading1} progress={isLoading1 ? 50 : 0} />
-                )}
-              </div>
-            </Card>
-          </FadeIn>
+    <div className="w-full max-w-4xl mx-auto flex flex-col gap-8">
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".pdf,application/pdf"
+        onChange={handleFileChange}
+        className="sr-only"
+        aria-hidden="true"
+      />
 
-          {/* Slot 2: Revised */}
-          <FadeIn direction="right" delay={0.1}>
-            <Card className="p-6 border-[rgba(255,255,255,0.06)] bg-[#0d0d18]/40 backdrop-blur-md flex flex-col gap-4 text-left">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-cyan-400">
-                Modified Agreement
-              </span>
-              <h3 className="text-xl font-bold text-white tracking-wide">2. Revised Contract</h3>
-              <p className="text-xs text-[var(--text-secondary)] leading-relaxed">
-                Upload the revised contract or redlined version with changes to check impact.
-              </p>
-              
-              <div className="mt-2 min-h-[160px] flex items-center justify-center border border-dashed border-[rgba(255,255,255,0.08)] bg-black/20 rounded-xl p-4">
-                {name2 ? (
-                  <div className="flex flex-col items-center text-center gap-2 p-4">
-                    <span className="text-xs font-bold text-slate-200 truncate max-w-[200px]">{name2}</span>
-                    <span className="text-[10px] text-emerald-400 font-extrabold uppercase tracking-widest bg-emerald-950/40 border border-emerald-500/20 px-2 py-0.5 rounded">✓ Parsed</span>
-                  </div>
-                ) : (
-                  <FileUpload onUpload={handleUpload2} isLoading={isLoading2} progress={isLoading2 ? 50 : 0} />
-                )}
-              </div>
-            </Card>
-          </FadeIn>
+      <div className="text-center flex flex-col gap-3">
+        <h2 className="text-2xl font-black text-[#F8FAFC]">Version Intelligence Viewer</h2>
+        <p className="text-sm text-[#A8B3C7]">
+          Upload original and revised agreements to instantly analyze semantic changes, risk implications, and structural modifications.
+        </p>
+        <div className="flex justify-center items-center gap-1.5 text-[10px] text-[#667085] mt-2">
+          <Shield className="w-3.5 h-3.5 text-[#10B981]" />
+          <span>Zero data retention · Browser-owned processing</span>
         </div>
-      )}
+      </div>
 
-      {/* Error Displays */}
-      {error && (
-        <FadeIn direction="none" className="p-4 rounded-xl border border-red-500/20 bg-red-950/10 text-red-400 text-sm font-medium text-left">
-          {error}
-        </FadeIn>
-      )}
-
-      {/* Compare Execution CTA */}
-      {!compareResult && clauses1 && clauses2 && (
-        <FadeIn direction="up" className="flex justify-center mt-2">
-          <Button
-            onClick={handleCompare}
-            isLoading={isComparing}
-            className="flex items-center justify-center gap-2.5 bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold py-3 px-8 text-sm tracking-widest uppercase shadow-glow-primary border-0 rounded-xl"
-          >
-            <GitCompare className="w-5 h-5" /> Compare Drafts
-          </Button>
-        </FadeIn>
-      )}
-
-      {/* Diff Results Output */}
-      {compareResult && (
-        <FadeIn direction="up">
-          <div className="flex flex-col gap-6">
-            <div className="flex justify-between items-center bg-black/30 border border-[rgba(255,255,255,0.06)] px-6 py-4 rounded-2xl">
-              <div className="flex items-center gap-3">
-                <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse-slow" />
-                <div className="flex flex-col text-left">
-                  <h3 className="font-extrabold text-white text-base">Comparison Analysis</h3>
-                  <p className="text-xs text-[var(--text-muted)] mt-0.5">Showing legal modifications and signer impact levels</p>
-                </div>
-              </div>
-              <Button variant="outline" size="sm" onClick={handleReset} className="border-slate-800 text-white hover:bg-white/[0.03]">
-                Compare New Contracts
-              </Button>
-            </div>
-            
-            <DiffViewer changes={compareResult.changes} />
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-6 items-center">
+        <FileSlot num={1} file={file1} />
+        
+        <div className="flex justify-center md:rotate-0 rotate-90 my-2 md:my-0">
+          <div className="w-12 h-12 rounded-full bg-[#1A202B] border border-[rgba(255,255,255,0.08)] flex items-center justify-center">
+            <ArrowRight className="w-5 h-5 text-[#667085]" />
           </div>
-        </FadeIn>
-      )}
+        </div>
+        
+        <FileSlot num={2} file={file2} />
+      </div>
+
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            className="p-3 bg-[rgba(239,68,68,0.1)] border border-[rgba(239,68,68,0.2)] rounded-xl flex items-center justify-center gap-2 text-sm text-[#EF4444]"
+          >
+            <AlertCircle className="w-4 h-4" />
+            {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="flex justify-center">
+        <motion.button
+          whileHover={file1 && file2 && !isLoading ? { scale: 1.02, y: -1 } : undefined}
+          whileTap={file1 && file2 && !isLoading ? { scale: 0.98 } : undefined}
+          disabled={!file1 || !file2 || isLoading}
+          onClick={handleCompare}
+          className={cn(
+            'flex items-center gap-3 px-8 py-4 rounded-xl font-bold transition-all duration-200',
+            file1 && file2
+              ? 'bg-gradient-to-r from-[#D4AF37] to-[#B8860B] text-[#090B0F] shadow-[0_0_20px_rgba(212,175,55,0.2)] hover:shadow-[0_0_30px_rgba(212,175,55,0.3)]'
+              : 'bg-[#1A202B] text-[#667085] cursor-not-allowed border border-[rgba(255,255,255,0.04)]',
+            isLoading && 'opacity-80 cursor-wait'
+          )}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Processing Diff...
+            </>
+          ) : (
+            <>
+              <GitCompare className="w-5 h-5" />
+              Compare Versions
+            </>
+          )}
+        </motion.button>
+      </div>
     </div>
   );
 }

@@ -73,30 +73,30 @@ export default function Modal({
           aria-label={title ?? 'Modal dialog'}
         >
           {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="absolute inset-0 bg-[#090B0F]/80 backdrop-blur-sm" />
 
           {/* Content */}
           <motion.div
             ref={contentRef}
-            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+            initial={{ opacity: 0, scale: 0.96, y: 8 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
+            exit={{ opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.25, ease: [0.25, 0.4, 0.25, 1] }}
             className={cn(
-              'relative w-full glass-panel p-6',
+              'relative w-full bg-[#171C25] border border-[rgba(255,255,255,0.08)] rounded-2xl p-6 shadow-xl',
               sizeStyles[size],
               className
             )}
           >
             {/* Header */}
             {title && (
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-display font-semibold text-white">
+              <div className="flex items-center justify-between mb-5 pb-4 border-b border-[rgba(255,255,255,0.06)]">
+                <h2 className="text-lg font-display font-semibold text-[#F8FAFC]">
                   {title}
                 </h2>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-surface-100 transition-colors"
+                  className="p-1.5 rounded-lg text-[#667085] hover:text-[#F8FAFC] hover:bg-[rgba(255,255,255,0.06)] transition-colors"
                   aria-label="Close modal"
                 >
                   <X className="w-5 h-5" />
@@ -108,7 +108,7 @@ export default function Modal({
             {!title && (
               <button
                 onClick={onClose}
-                className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-surface-100 transition-colors z-10"
+                className="absolute top-4 right-4 p-1.5 rounded-lg text-[#667085] hover:text-[#F8FAFC] hover:bg-[rgba(255,255,255,0.06)] transition-colors z-10"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
