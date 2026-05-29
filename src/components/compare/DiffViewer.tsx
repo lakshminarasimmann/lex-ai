@@ -1,15 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AlertTriangle, Plus, Minus, Edit2, Shield, Info } from 'lucide-react';
+import { Plus, Minus, Edit2, Shield, Info, AlertTriangle } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
-import { DiffResult } from '@/lib/types';
+import { CompareResult } from '@/lib/types';
 import StaggerChildren from '@/components/animations/StaggerChildren';
 import FadeIn from '@/components/animations/FadeIn';
 
 interface DiffViewerProps {
-  result: DiffResult;
+  result: CompareResult;
 }
 
 export default function DiffViewer({ result }: DiffViewerProps) {
@@ -17,14 +17,14 @@ export default function DiffViewer({ result }: DiffViewerProps) {
 
   const filteredChanges = result.changes.filter(change => {
     if (filter === 'all') return true;
-    return change.type === filter;
+    return change.changeType === filter;
   });
 
   const stats = {
     total: result.changes.length,
-    added: result.changes.filter(c => c.type === 'added').length,
-    removed: result.changes.filter(c => c.type === 'removed').length,
-    modified: result.changes.filter(c => c.type === 'modified').length,
+    added: result.changes.filter(c => c.changeType === 'added').length,
+    removed: result.changes.filter(c => c.changeType === 'removed').length,
+    modified: result.changes.filter(c => c.changeType === 'modified').length,
   };
 
   const getChangeIcon = (type: string) => {
@@ -36,11 +36,12 @@ export default function DiffViewer({ result }: DiffViewerProps) {
     }
   };
 
-  const getRiskBadgeVariant = (level: string) => {
-    switch (level?.toLowerCase()) {
-      case 'high': return 'danger';
-      case 'medium': return 'warning';
-      default: return 'success';
+  const getImpactBadgeVariant = (impact: string) => {
+    switch (impact?.toLowerCase()) {
+      case 'worse': return 'danger';
+      case 'neutral': return 'warning';
+      case 'better': return 'success';
+      default: return 'outline';
     }
   };
 
@@ -53,7 +54,7 @@ export default function DiffViewer({ result }: DiffViewerProps) {
             <h2 className="text-lg font-bold text-[#F8FAFC]">Diff Analysis Complete</h2>
             <p className="text-sm text-[#A8B3C7] flex items-center gap-2">
               <Shield className="w-4 h-4 text-[#D4AF37]" />
-              Compared <span className="font-mono text-[#F8FAFC] text-xs px-1.5 py-0.5 bg-[#1A202B] rounded border border-[rgba(255,255,255,0.08)]">{result.file1Name}</span> and <span className="font-mono text-[#F8FAFC] text-xs px-1.5 py-0.5 bg-[#1A202B] rounded border border-[rgba(255,255,255,0.08)]">{result.file2Name}</span>
+              Comparison complete
             </p>
           </div>
 
@@ -113,7 +114,7 @@ export default function DiffViewer({ result }: DiffViewerProps) {
           <div className="flex flex-col gap-1">
             <h3 className="text-sm font-bold text-[#F8FAFC]">AI Impact Summary</h3>
             <p className="text-xs text-[#A8B3C7] leading-relaxed">
-              {result.summary}
+              Reviewed all semantic changes between versions.
             </p>
           </div>
         </div>
@@ -123,65 +124,46 @@ export default function DiffViewer({ result }: DiffViewerProps) {
       <div className="flex flex-col gap-4 mt-2">
         <StaggerChildren>
           {filteredChanges.length > 0 ? (
-            filteredChanges.map((change) => (
-              <FadeIn key={change.id} direction="up">
+            filteredChanges.map((change, idx) => (
+              <FadeIn key={idx} direction="up">
                 <Card 
                   className={`p-5 flex flex-col gap-4 border-[rgba(255,255,255,0.06)] bg-[#11151C] border-l-[3px] ${
-                    change.type === 'added' ? 'border-l-[#10B981]' :
-                    change.type === 'removed' ? 'border-l-[#EF4444]' : 'border-l-[#F59E0B]'
+                    change.changeType === 'added' ? 'border-l-[#10B981]' :
+                    change.changeType === 'removed' ? 'border-l-[#EF4444]' : 'border-l-[#F59E0B]'
                   }`}
                   padding="none"
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
                       <div className={`p-1.5 rounded-lg border ${
-                        change.type === 'added' ? 'bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]' :
-                        change.type === 'removed' ? 'bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]' : 
+                        change.changeType === 'added' ? 'bg-[rgba(16,185,129,0.1)] border-[rgba(16,185,129,0.2)]' :
+                        change.changeType === 'removed' ? 'bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.2)]' : 
                         'bg-[rgba(245,158,11,0.1)] border-[rgba(245,158,11,0.2)]'
                       }`}>
-                        {getChangeIcon(change.type)}
+                        {getChangeIcon(change.changeType)}
                       </div>
                       <div>
                         <span className="text-xs font-bold text-[#F8FAFC]">
-                          {change.type === 'modified' ? 'Modified Clause' : change.type === 'added' ? 'New Clause Added' : 'Clause Removed'}
+                          {change.changeType === 'modified' ? 'Modified Clause' : change.changeType === 'added' ? 'New Clause Added' : 'Clause Removed'}
                         </span>
-                        {change.location && (
-                          <p className="text-[10px] text-[#667085] uppercase tracking-wider font-label">
-                            {change.location}
-                          </p>
-                        )}
                       </div>
                     </div>
-                    {change.riskLevel && (
-                      <Badge variant={getRiskBadgeVariant(change.riskLevel)}>
-                        {change.riskLevel.toUpperCase()} RISK
+                    {change.impact && (
+                      <Badge variant={getImpactBadgeVariant(change.impact)}>
+                        {change.impact.toUpperCase()} IMPACT
                       </Badge>
                     )}
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* Old Version */}
-                    {change.oldText && (
-                      <div className="flex flex-col gap-2 p-4 bg-[rgba(239,68,68,0.03)] border border-[rgba(239,68,68,0.1)] rounded-xl relative">
-                        <span className="absolute top-2 right-3 text-[9px] font-bold text-[#EF4444] uppercase tracking-[0.15em] font-label">Previous</span>
-                        <p className="text-xs font-mono text-[#A8B3C7] leading-relaxed pt-2 line-through opacity-70">
-                          {change.oldText}
-                        </p>
-                      </div>
-                    )}
-                    
-                    {/* New Version */}
-                    {change.newText && (
-                      <div className="flex flex-col gap-2 p-4 bg-[rgba(16,185,129,0.03)] border border-[rgba(16,185,129,0.1)] rounded-xl relative">
-                        <span className="absolute top-2 right-3 text-[9px] font-bold text-[#10B981] uppercase tracking-[0.15em] font-label">Current</span>
-                        <p className="text-xs font-mono text-[#F8FAFC] leading-relaxed pt-2">
-                          {change.newText}
-                        </p>
-                      </div>
-                    )}
+                  <div className="grid grid-cols-1 gap-4">
+                    <div className="flex flex-col gap-2 p-4 bg-[rgba(16,185,129,0.03)] border border-[rgba(16,185,129,0.1)] rounded-xl relative">
+                      <p className="text-xs font-mono text-[#F8FAFC] leading-relaxed pt-2">
+                        {change.clause}
+                      </p>
+                    </div>
                   </div>
 
-                  {change.implication && (
+                  {change.explanation && (
                     <div className="mt-2 p-3.5 bg-[#090B0F] rounded-lg border border-[rgba(255,255,255,0.04)] flex gap-3 items-start">
                       <AlertTriangle className="w-4 h-4 text-[#D4AF37] shrink-0 mt-0.5" />
                       <div>
@@ -189,7 +171,7 @@ export default function DiffViewer({ result }: DiffViewerProps) {
                           Strategic Implication
                         </span>
                         <p className="text-xs text-[#A8B3C7] leading-relaxed">
-                          {change.implication}
+                          {change.explanation}
                         </p>
                       </div>
                     </div>
