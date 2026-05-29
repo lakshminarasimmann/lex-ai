@@ -1,126 +1,216 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageSquare, X, Send, Loader2, Sparkles } from 'lucide-react';
-import { useChat } from '@/hooks/useChat';
+import { MessageSquare, Send, X, Loader2, Sparkles, AlertTriangle } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 import ChatMessage from './ChatMessage';
-import Card from '@/components/ui/Card';
+import { sendChatMessage } from '@/lib/api';
+import { Message, Clause } from '@/lib/types';
+import { CHAT_SUGGESTIONS } from '@/lib/constants';
 
 interface ChatInterfaceProps {
   docId: string;
-  clauses: any[];
+  clauses: Clause[];
   docType?: string;
 }
 
-export default function ChatInterface({ docId, clauses, docType = 'agreement' }: ChatInterfaceProps) {
+export default function ChatInterface({ docId, clauses, docType }: ChatInterfaceProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 'welcome',
+      role: 'assistant',
+      content: 'I am your AI Legal Copilot. I can explain complex terms, summarize obligations, or identify hidden risks in this agreement. What would you like to know?',
+      timestamp: Date.now(),
+    },
+  ]);
   const [input, setInput] = useState('');
-  const { messages, isLoading, error, sendMessage } = useChat(docId, clauses, docType);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
+    if (isOpen) {
+      scrollToBottom();
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [messages, isOpen, isLoading]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!input.trim() || isLoading) return;
+  const handleSend = async (text: string) => {
+    if (!text.trim()) return;
 
-    const query = input;
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: text,
+      timestamp: Date.now(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
     setInput('');
-    await sendMessage(query);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await sendChatMessage(docId, text, messages, clauses, docType);
+      
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: response.reply,
+        timestamp: Date.now(),
+      };
+      
+      setMessages((prev) => [...prev, assistantMessage]);
+    } catch (err: any) {
+      console.error('Chat error:', err);
+      setError('Copilot failed to generate a response. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend(input);
+    }
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-      {isOpen && (
-        <Card className="w-[350px] sm:w-[400px] h-[500px] flex flex-col border-[rgba(255,255,255,0.08)] bg-[#0d0d18]/90 backdrop-blur-xl shadow-glow-primary overflow-hidden transition-all duration-300">
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-[rgba(255,255,255,0.06)] bg-black/40">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-indigo-400 animate-pulse-slow" />
-              <div className="flex flex-col text-left">
-                <h4 className="font-bold text-white text-sm">Contract Q&A Chat</h4>
-                <span className="text-[10px] text-[var(--text-muted)] font-semibold uppercase">Ask questions about terms</span>
+    <>
+      {/* Floating Action Button */}
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsOpen(true)}
+            className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-gradient-to-br from-[#D4AF37] to-[#B8860B] rounded-full shadow-[0_0_30px_rgba(212,175,55,0.3)] flex items-center justify-center text-[#090B0F]"
+            aria-label="Open Legal Copilot"
+          >
+            <Sparkles className="w-6 h-6 animate-pulse" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Chat Window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 40, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 40, scale: 0.95 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="fixed bottom-6 right-6 z-50 w-[420px] max-w-[calc(100vw-3rem)] h-[600px] max-h-[calc(100vh-6rem)] bg-[#090B0F] border border-[rgba(212,175,55,0.2)] rounded-2xl shadow-[0_16px_48px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 bg-[#11151C] border-b border-[rgba(255,255,255,0.06)]">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-[#D4AF37]" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-[#F8FAFC] text-sm">Legal Copilot</h3>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+                    <span className="text-[10px] text-[#A8B3C7] font-semibold uppercase tracking-wider font-label">Active Session</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 text-[#667085] hover:text-[#F8FAFC] hover:bg-[rgba(255,255,255,0.06)] rounded-lg transition-colors"
+                aria-label="Close Chat"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Messages Area */}
+            <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-6 no-scrollbar bg-[url('/grid.svg')] bg-center">
+              {messages.map((msg) => (
+                <ChatMessage key={msg.id} message={msg} />
+              ))}
+
+              {isLoading && (
+                <div className="flex gap-4 w-full">
+                  <div className="w-8 h-8 rounded-lg bg-[rgba(212,175,55,0.1)] border border-[rgba(212,175,55,0.2)] text-[#D4AF37] flex items-center justify-center shrink-0 mt-1 shadow-[0_0_12px_rgba(212,175,55,0.15)]">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div className="bg-[rgba(212,175,55,0.03)] border border-[rgba(212,175,55,0.15)] rounded-2xl rounded-tl-sm p-4 text-[13px] text-[#A8B3C7] flex items-center gap-2">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin text-[#D4AF37]" />
+                    <span>Analyzing contract context...</span>
+                  </div>
+                </div>
+              )}
+
+              {error && (
+                <div className="p-3 bg-[rgba(239,68,68,0.1)] border border-[rgba(239,68,68,0.2)] rounded-xl flex items-start gap-2 text-xs text-[#EF4444]">
+                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <p>{error}</p>
+                </div>
+              )}
+
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Suggestions (only if few messages) */}
+            {messages.length < 3 && !isLoading && (
+              <div className="p-4 flex flex-wrap gap-2 border-t border-[rgba(255,255,255,0.04)] bg-[#11151C]">
+                <span className="w-full text-[10px] font-bold text-[#667085] uppercase tracking-wider mb-1 font-label">Suggested Queries</span>
+                {CHAT_SUGGESTIONS.map((suggestion, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => handleSend(suggestion)}
+                    className="text-xs text-[#A8B3C7] bg-[#1A202B] hover:bg-[#242B36] border border-[rgba(255,255,255,0.06)] hover:border-[rgba(212,175,55,0.3)] px-3 py-1.5 rounded-full transition-colors text-left"
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Input Area */}
+            <div className="p-4 bg-[#11151C] border-t border-[rgba(255,255,255,0.06)]">
+              <div className="relative flex items-end">
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Ask a question about this contract..."
+                  className="w-full bg-[#1A202B] border border-[rgba(255,255,255,0.08)] rounded-xl py-3 pl-4 pr-12 text-sm text-[#F8FAFC] placeholder:text-[#667085] focus:outline-none focus:border-[rgba(212,175,55,0.4)] focus:shadow-[0_0_15px_rgba(212,175,55,0.1)] resize-none min-h-[50px] max-h-[120px]"
+                  rows={1}
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={() => handleSend(input)}
+                  disabled={!input.trim() || isLoading}
+                  className="absolute right-2 bottom-2 p-2 bg-[#D4AF37] text-[#090B0F] rounded-lg disabled:opacity-50 disabled:bg-[#1A202B] disabled:text-[#667085] transition-colors"
+                  aria-label="Send message"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="mt-2 text-center">
+                <span className="text-[9px] text-[#667085] uppercase tracking-wider font-semibold">
+                  Responses are generated by AI and may not be 100% accurate.
+                </span>
               </div>
             </div>
-            <button 
-              onClick={() => setIsOpen(false)}
-              className="text-[var(--text-secondary)] hover:text-white p-1 rounded hover:bg-white/[0.03] transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Conversation view */}
-          <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-4 no-scrollbar">
-            {messages.length === 0 ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center p-6 text-[var(--text-secondary)] gap-3 mt-12">
-                <div className="w-10 h-10 rounded-full bg-indigo-950/40 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-                  <MessageSquare className="w-5 h-5" />
-                </div>
-                <div className="flex flex-col gap-1 max-w-[250px]">
-                  <p className="text-xs font-bold text-slate-200">Ask Anything!</p>
-                  <p className="text-[10px] text-[var(--text-muted)] leading-relaxed">
-                    "Is there a grace period for rent?"<br />
-                    "Does this contract assign IP rights?"<br />
-                    "What are the termination conditions?"
-                  </p>
-                </div>
-              </div>
-            ) : (
-              messages.map((msg, idx) => (
-                <ChatMessage key={idx} message={msg} />
-              ))
-            )}
-
-            {isLoading && (
-              <div className="flex gap-4 p-4 rounded-xl border border-[rgba(255,255,255,0.04)] bg-white/[0.01] items-center text-xs text-[var(--text-muted)]">
-                <Loader2 className="w-4 h-4 animate-spin text-indigo-500" />
-                <span>LexAI is analyzing the contract...</span>
-              </div>
-            )}
-
-            {error && (
-              <div className="p-3 text-xs border border-red-500/10 bg-red-950/10 text-red-400 rounded-lg">
-                {error}
-              </div>
-            )}
-            
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Form */}
-          <form onSubmit={handleSubmit} className="p-4 border-t border-[rgba(255,255,255,0.06)] bg-black/30 flex gap-2">
-            <input
-              type="text"
-              placeholder="Ask a question about this contract..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              disabled={isLoading}
-              className="flex-1 bg-black/40 border border-[rgba(255,255,255,0.06)] rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500/40 transition-colors disabled:opacity-40"
-            />
-            <button
-              type="submit"
-              disabled={!input.trim() || isLoading}
-              className="p-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-500 shadow-glow-primary transition-all duration-200 disabled:opacity-30 disabled:hover:bg-indigo-600 disabled:shadow-none"
-            >
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-        </Card>
-      )}
-
-      {/* Floating Action Button */}
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`w-14 h-14 rounded-full flex items-center justify-center text-white shadow-glow-primary transition-all duration-300 hover:scale-105 ${
-          isOpen ? 'bg-red-600 shadow-red-500/20' : 'bg-indigo-600 bg-gradient-to-tr from-indigo-600 to-indigo-500'
-        }`}
-      >
-        {isOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-      </button>
-    </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

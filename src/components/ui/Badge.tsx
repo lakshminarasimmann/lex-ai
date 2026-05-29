@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
 
-type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'gold';
 type BadgeSize = 'sm' | 'md';
 
 interface BadgeProps {
@@ -13,19 +13,21 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-slate-500/10 text-slate-300 border-slate-500/20',
-  success: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-  warning: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-  danger: 'bg-red-500/10 text-red-400 border-red-500/20',
-  info: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+  default: 'bg-[rgba(255,255,255,0.06)] text-[#A8B3C7] border-[rgba(255,255,255,0.1)]',
+  success: 'bg-[rgba(16,185,129,0.1)] text-[#10B981] border-[rgba(16,185,129,0.2)]',
+  warning: 'bg-[rgba(245,158,11,0.1)] text-[#F59E0B] border-[rgba(245,158,11,0.2)]',
+  danger: 'bg-[rgba(239,68,68,0.1)] text-[#EF4444] border-[rgba(239,68,68,0.2)]',
+  info: 'bg-[rgba(59,130,246,0.1)] text-[#3B82F6] border-[rgba(59,130,246,0.2)]',
+  gold: 'bg-[rgba(212,175,55,0.1)] text-[#D4AF37] border-[rgba(212,175,55,0.2)]',
 };
 
 const glowStyles: Record<BadgeVariant, string> = {
-  default: 'shadow-[0_0_12px_rgba(100,116,139,0.15)]',
-  success: 'shadow-[0_0_12px_rgba(16,185,129,0.2)]',
-  warning: 'shadow-[0_0_12px_rgba(245,158,11,0.2)]',
-  danger: 'shadow-[0_0_12px_rgba(239,68,68,0.2)]',
-  info: 'shadow-[0_0_12px_rgba(59,130,246,0.2)]',
+  default: 'shadow-[0_0_10px_rgba(100,116,139,0.1)]',
+  success: 'shadow-[0_0_10px_rgba(16,185,129,0.15)]',
+  warning: 'shadow-[0_0_10px_rgba(245,158,11,0.15)]',
+  danger: 'shadow-[0_0_10px_rgba(239,68,68,0.15)]',
+  info: 'shadow-[0_0_10px_rgba(59,130,246,0.15)]',
+  gold: 'shadow-[0_0_10px_rgba(212,175,55,0.15)]',
 };
 
 const sizeStyles: Record<BadgeSize, string> = {
@@ -43,7 +45,7 @@ export default function Badge({
   return (
     <span
       className={cn(
-        'inline-flex items-center font-medium rounded-full border whitespace-nowrap',
+        'inline-flex items-center font-semibold rounded-full border whitespace-nowrap tracking-wide',
         variantStyles[variant],
         sizeStyles[size],
         glow && glowStyles[variant],

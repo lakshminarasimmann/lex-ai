@@ -9,27 +9,36 @@ import PageTransition from '@/components/animations/PageTransition';
 export default function Home() {
   return (
     <PageTransition>
-      <div className="relative min-h-screen bg-[#06060c] text-slate-100 overflow-x-hidden font-sans selection:bg-indigo-500/30 selection:text-white">
-        {/* Dynamic header / navigation */}
-        <header className="fixed top-0 left-0 w-full z-50 border-b border-[rgba(255,255,255,0.04)] bg-[#06060c]/60 backdrop-blur-md">
+      <div className="relative min-h-screen bg-[#090B0F] text-[#F8FAFC] overflow-x-hidden font-sans selection:bg-[rgba(212,175,55,0.25)] selection:text-white">
+        {/* Navigation header */}
+        <header className="fixed top-0 left-0 w-full z-50 border-b border-[rgba(255,255,255,0.06)] bg-[#090B0F]/80 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-indigo-600 to-cyan-500 flex items-center justify-center shadow-glow-primary">
-                <span className="font-bold text-white text-base">L</span>
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D4AF37] to-[#B8860B] flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 3 2 12h4v8h4v-6h4v6h4v-8h4z" opacity="0"/>
+                  <line x1="12" y1="3" x2="12" y2="21" />
+                  <path d="M2 12h8M14 12h8" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
               </div>
-              <span className="font-bold text-white tracking-wider text-lg">LexAI</span>
+              <span className="font-bold text-[#F8FAFC] tracking-wider text-lg font-display">LexAI</span>
             </div>
 
-            <div className="hidden sm:flex items-center gap-8 text-sm text-[var(--text-secondary)] font-medium">
-              <a href="#features" className="hover:text-white transition-colors">Features</a>
-              <a href="#samples" className="hover:text-white transition-colors">Sandbox</a>
-              <a href="#about" className="hover:text-white transition-colors">About</a>
+            <div className="hidden sm:flex items-center gap-8 text-sm text-[#A8B3C7] font-medium">
+              <a href="#features" className="hover:text-[#F8FAFC] transition-colors duration-200">Features</a>
+              <a href="#samples" className="hover:text-[#F8FAFC] transition-colors duration-200">Sandbox</a>
+              <a href="#about" className="hover:text-[#F8FAFC] transition-colors duration-200">About</a>
             </div>
 
-            <div>
+            <div className="flex items-center gap-4">
+              <div className="hidden md:flex items-center gap-1.5 text-[10px] text-[#667085] font-semibold">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <span>ZERO DATA RETENTION</span>
+              </div>
               <a 
                 href="#upload" 
-                className="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 hover:shadow-glow-primary transition-all duration-200"
+                className="inline-flex items-center justify-center rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-bold text-[#090B0F] shadow-[0_0_20px_rgba(212,175,55,0.15)] hover:bg-[#E0C04A] hover:shadow-[0_0_30px_rgba(212,175,55,0.25)] transition-all duration-200"
               >
                 Get Started
               </a>

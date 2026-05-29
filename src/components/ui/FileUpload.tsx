@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Upload, FileText, AlertCircle, CheckCircle2, X } from 'lucide-react';
+import { FileText, AlertCircle, CheckCircle2, X, Shield, Scale } from 'lucide-react';
 import { cn, formatFileSize } from '@/lib/utils';
 import { MAX_FILE_SIZE, ACCEPTED_FILE_TYPES } from '@/lib/constants';
 
@@ -95,13 +95,13 @@ export default function FileUpload({
         onDrop={handleDrop}
         onClick={() => !isLoading && inputRef.current?.click()}
         className={cn(
-          'relative cursor-pointer rounded-2xl border-2 border-dashed transition-all duration-300',
+          'relative cursor-pointer rounded-xl border-2 border-dashed transition-all duration-300 overflow-hidden',
           compact ? 'p-6' : 'p-10',
           isDragOver
-            ? 'border-primary-400 bg-primary-500/10 shadow-glow-primary'
-            : 'border-white/10 hover:border-white/20 hover:bg-surface-50',
+            ? 'border-[#D4AF37]/50 bg-[rgba(212,175,55,0.06)] shadow-[0_0_30px_rgba(212,175,55,0.1)]'
+            : 'border-[rgba(255,255,255,0.08)] hover:border-[rgba(255,255,255,0.14)] hover:bg-[rgba(255,255,255,0.02)]',
           isLoading && 'pointer-events-none opacity-80',
-          error && 'border-red-500/30'
+          error && 'border-[#EF4444]/30'
         )}
         whileHover={!isLoading ? { scale: 1.005 } : undefined}
         role="button"
@@ -123,16 +123,10 @@ export default function FileUpload({
           aria-hidden="true"
         />
 
-        {/* Gradient border on hover */}
-        <div
-          className={cn(
-            'absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 pointer-events-none',
-            isDragOver && 'opacity-100'
-          )}
-          style={{
-            background: 'linear-gradient(135deg, rgba(99,102,241,0.2), rgba(6,182,212,0.2))',
-          }}
-        />
+        {/* Watermark legal shield background */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+          <Shield className="w-32 h-32" />
+        </div>
 
         <AnimatePresence mode="wait">
           {isLoading ? (
@@ -141,43 +135,35 @@ export default function FileUpload({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col items-center gap-4"
+              className="flex flex-col items-center gap-4 relative z-10"
             >
-              <div className="relative w-14 h-14">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 56 56">
+              {/* Scanning animation */}
+              <div className="relative w-16 h-16">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 64 64">
+                  <circle cx="32" cy="32" r="28" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
                   <circle
-                    cx="28"
-                    cy="28"
-                    r="24"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.05)"
-                    strokeWidth="4"
-                  />
-                  <circle
-                    cx="28"
-                    cy="28"
-                    r="24"
-                    fill="none"
-                    stroke="url(#progress-gradient)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeDasharray={`${progress * 1.5} 150`}
-                    className="transition-all duration-300"
+                    cx="32" cy="32" r="28" fill="none"
+                    stroke="url(#intake-gradient)" strokeWidth="3" strokeLinecap="round"
+                    strokeDasharray={`${progress * 1.76} 176`}
+                    className="transition-all duration-500"
                   />
                   <defs>
-                    <linearGradient id="progress-gradient" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stopColor="#6366f1" />
-                      <stop offset="100%" stopColor="#06b6d4" />
+                    <linearGradient id="intake-gradient" x1="0" y1="0" x2="1" y2="1">
+                      <stop offset="0%" stopColor="#D4AF37" />
+                      <stop offset="100%" stopColor="#B8860B" />
                     </linearGradient>
                   </defs>
                 </svg>
-                <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-primary-400">
+                <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-[#D4AF37]">
                   {Math.round(progress)}%
                 </span>
               </div>
-              <p className="text-sm text-slate-300">Uploading document...</p>
+              <div className="text-center">
+                <p className="text-sm font-semibold text-[#F8FAFC]">Processing Evidence...</p>
+                <p className="text-xs text-[#667085] mt-1">AI intake pipeline active</p>
+              </div>
               {selectedFile && (
-                <p className="text-xs text-slate-500">{selectedFile.name}</p>
+                <p className="text-xs text-[#667085]">{selectedFile.name}</p>
               )}
             </motion.div>
           ) : selectedFile && !error ? (
@@ -186,21 +172,22 @@ export default function FileUpload({
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              className="flex flex-col items-center gap-3"
+              className="flex flex-col items-center gap-3 relative z-10"
             >
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center">
-                <CheckCircle2 className="w-6 h-6 text-emerald-400" />
+              <div className="w-12 h-12 rounded-xl bg-[rgba(16,185,129,0.1)] border border-[rgba(16,185,129,0.2)] flex items-center justify-center">
+                <CheckCircle2 className="w-6 h-6 text-[#10B981]" />
               </div>
               <div className="text-center">
-                <p className="text-sm font-medium text-slate-200">{selectedFile.name}</p>
-                <p className="text-xs text-slate-500 mt-1">{formatFileSize(selectedFile.size)}</p>
+                <p className="text-sm font-semibold text-[#F8FAFC]">{selectedFile.name}</p>
+                <p className="text-xs text-[#667085] mt-1">{formatFileSize(selectedFile.size)}</p>
               </div>
+              <span className="inline-flex items-center gap-1.5 text-[10px] font-bold text-[#10B981] bg-[rgba(16,185,129,0.08)] border border-[rgba(16,185,129,0.15)] px-2.5 py-1 rounded-full uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#10B981]" />
+                AI Ready
+              </span>
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  clearFile();
-                }}
-                className="text-xs text-slate-400 hover:text-slate-200 transition-colors flex items-center gap-1"
+                onClick={(e) => { e.stopPropagation(); clearFile(); }}
+                className="text-xs text-[#667085] hover:text-[#A8B3C7] transition-colors flex items-center gap-1 mt-1"
               >
                 <X className="w-3 h-3" /> Choose different file
               </button>
@@ -211,33 +198,39 @@ export default function FileUpload({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col items-center gap-4"
+              className="flex flex-col items-center gap-4 relative z-10"
             >
               <motion.div
                 animate={isDragOver ? { scale: 1.1, y: -4 } : { scale: 1, y: 0 }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 className={cn(
-                  'w-14 h-14 rounded-2xl flex items-center justify-center',
+                  'w-14 h-14 rounded-xl flex items-center justify-center',
                   isDragOver
-                    ? 'bg-primary-500/20 border border-primary-500/30'
-                    : 'bg-surface-100 border border-white/10'
+                    ? 'bg-[rgba(212,175,55,0.12)] border border-[rgba(212,175,55,0.25)]'
+                    : 'bg-[#171C25] border border-[rgba(255,255,255,0.08)]'
                 )}
               >
                 {isDragOver ? (
-                  <FileText className="w-7 h-7 text-primary-400" />
+                  <Scale className="w-7 h-7 text-[#D4AF37]" />
                 ) : (
-                  <Upload className="w-7 h-7 text-slate-400" />
+                  <FileText className="w-7 h-7 text-[#667085]" />
                 )}
               </motion.div>
 
               <div className="text-center">
-                <p className="text-sm font-medium text-slate-200">
-                  {isDragOver ? 'Drop your PDF here' : 'Drop your contract here'}
+                <p className="text-sm font-semibold text-[#F8FAFC]">
+                  {isDragOver ? 'Release to analyze' : 'Upload Contract for Analysis'}
                 </p>
-                <p className="text-xs text-slate-500 mt-1.5">
-                  or <span className="text-primary-400 hover:underline">browse files</span>
+                <p className="text-xs text-[#667085] mt-1.5">
+                  or <span className="text-[#D4AF37] hover:underline cursor-pointer">browse files</span>
                   {' · '}PDF up to {formatFileSize(MAX_FILE_SIZE)}
                 </p>
+              </div>
+
+              {/* Security indicator */}
+              <div className="flex items-center gap-1.5 text-[10px] text-[#667085]">
+                <Shield className="w-3 h-3 text-[#10B981]" />
+                <span>Zero data retention · Browser-owned processing</span>
               </div>
             </motion.div>
           )}
@@ -251,7 +244,7 @@ export default function FileUpload({
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
-            className="flex items-center gap-2 mt-3 text-sm text-red-400"
+            className="flex items-center gap-2 mt-3 text-sm text-[#EF4444]"
           >
             <AlertCircle className="w-4 h-4 shrink-0" />
             {error}

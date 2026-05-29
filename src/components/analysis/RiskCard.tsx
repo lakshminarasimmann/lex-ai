@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Copy, Check, Languages } from 'lucide-react';
+import { ChevronDown, ChevronUp, Copy, Check, Languages, Brain, GitPullRequest } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { Clause } from '@/lib/types';
@@ -23,10 +23,10 @@ export default function RiskCard({ clause, onSelect }: RiskCardProps) {
 
   const getRiskColorClass = (level: string) => {
     switch (level?.toLowerCase()) {
-      case 'critical': return 'text-red-400 border-red-500/20 bg-red-950/20';
-      case 'high': return 'text-orange-400 border-orange-500/20 bg-orange-950/20';
-      case 'medium': return 'text-amber-400 border-amber-500/20 bg-amber-950/20';
-      default: return 'text-emerald-400 border-emerald-500/20 bg-emerald-950/20';
+      case 'critical': return 'text-[#EF4444] border-[#EF4444]/20 bg-[#EF4444]/10';
+      case 'high': return 'text-[#f97316] border-[#f97316]/20 bg-[#f97316]/10';
+      case 'medium': return 'text-[#F59E0B] border-[#F59E0B]/20 bg-[#F59E0B]/10';
+      default: return 'text-[#10B981] border-[#10B981]/20 bg-[#10B981]/10';
     }
   };
 
@@ -66,19 +66,25 @@ export default function RiskCard({ clause, onSelect }: RiskCardProps) {
 
   return (
     <Card 
-      className={`p-5 flex flex-col gap-4 border-[rgba(255,255,255,0.06)] bg-white/[0.01] hover:bg-white/[0.02] transition-all duration-200 border-l-4 ${
-        clause.riskLevel === 'critical' ? 'border-l-red-500' :
-        clause.riskLevel === 'high' ? 'border-l-orange-500' :
-        clause.riskLevel === 'medium' ? 'border-l-amber-500' : 'border-l-emerald-500'
+      className={`p-5 flex flex-col gap-4 border-[rgba(255,255,255,0.06)] bg-[#11151C] hover:bg-[#1A202B] transition-colors duration-200 border-l-[3px] ${
+        clause.riskLevel === 'critical' ? 'border-l-[#EF4444]' :
+        clause.riskLevel === 'high' ? 'border-l-[#f97316]' :
+        clause.riskLevel === 'medium' ? 'border-l-[#F59E0B]' : 'border-l-[#10B981]'
       }`}
+      padding="none"
     >
       {/* Risk Card Header */}
       <div className="flex justify-between items-start gap-4">
         <div className="flex flex-col gap-1.5">
-          <span className="text-xs font-extrabold uppercase tracking-wider text-[var(--text-muted)]">
+          <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#667085] font-label">
             Clause {clause.index} &bull; {clause.category || 'General Terms'}
           </span>
-          <Badge variant={getRiskBadgeVariant(clause.riskLevel || 'low')} className="w-fit">
+          <Badge variant={getRiskBadgeVariant(clause.riskLevel || 'low')} className="w-fit" glow>
+            <span className={`inline-block w-1.5 h-1.5 rounded-full mr-1.5 ${
+              clause.riskLevel === 'critical' ? 'bg-[#EF4444] animate-pulse' :
+              clause.riskLevel === 'high' ? 'bg-[#f97316]' :
+              clause.riskLevel === 'medium' ? 'bg-[#F59E0B]' : 'bg-[#10B981]'
+            }`} />
             {clause.riskLevel?.toUpperCase()} RISK
           </Badge>
         </div>
@@ -88,7 +94,7 @@ export default function RiskCard({ clause, onSelect }: RiskCardProps) {
           {clause.pageNumber && (
             <button
               onClick={() => onSelect && onSelect(clause.pageNumber!)}
-              className="text-[10px] font-bold text-indigo-400 bg-indigo-950/40 hover:bg-indigo-900/50 border border-indigo-500/20 px-2 py-1 rounded transition-colors"
+              className="text-[10px] font-bold text-[#D4AF37] bg-[rgba(212,175,55,0.1)] hover:bg-[rgba(212,175,55,0.15)] border border-[rgba(212,175,55,0.2)] px-2.5 py-1 rounded-md transition-colors font-label uppercase tracking-wider"
             >
               Page {clause.pageNumber}
             </button>
@@ -97,69 +103,59 @@ export default function RiskCard({ clause, onSelect }: RiskCardProps) {
           {/* Collapsible toggle */}
           <button 
             onClick={() => setIsExpanded(!isExpanded)}
-            className="text-[var(--text-secondary)] hover:text-white p-1 rounded hover:bg-white/[0.04] transition-colors"
+            className="text-[#667085] hover:text-[#F8FAFC] p-1.5 rounded-lg hover:bg-[rgba(255,255,255,0.06)] transition-colors border border-transparent hover:border-[rgba(255,255,255,0.08)]"
           >
-            {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
         </div>
       </div>
 
       {/* Snippet display */}
       <div className="flex flex-col gap-2">
-        <div className="p-3 bg-black/40 rounded-lg text-xs leading-relaxed text-[var(--text-secondary)] border border-[rgba(255,255,255,0.03)] font-mono max-h-24 overflow-y-auto">
+        <div className="p-3.5 bg-[#090B0F] rounded-lg text-xs leading-relaxed text-[#A8B3C7] border border-[rgba(255,255,255,0.04)] font-mono max-h-24 overflow-y-auto">
           "{clause.text}"
         </div>
       </div>
 
       {/* Explanations (collapsible) */}
       {isExpanded && (
-        <div className="flex flex-col gap-4 border-t border-[rgba(255,255,255,0.06)] pt-4 animate-fadeIn">
+        <div className="flex flex-col gap-5 border-t border-[rgba(255,255,255,0.06)] pt-5 animate-slide-up">
           {/* Risk Amplification reason */}
           {clause.riskReason && (
-            <div className={`p-3 rounded-lg border text-xs font-semibold leading-relaxed ${getRiskColorClass(clause.riskLevel || 'low')}`}>
+            <div className={`p-3.5 rounded-lg border text-xs font-medium leading-relaxed ${getRiskColorClass(clause.riskLevel || 'low')}`}>
               <strong>Risk Flag:</strong> {clause.riskReason}
             </div>
           )}
 
           {/* Plain English Translation & Translation Toolbar */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             <div className="flex justify-between items-center">
-              <h4 className="text-xs font-extrabold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1.5">
-                <span>Plain-English Analysis</span>
+              <h4 className="text-[11px] font-bold uppercase tracking-wider text-[#D4AF37] flex items-center gap-1.5 font-label">
+                <Brain className="w-3.5 h-3.5" />
+                <span>AI Interpretation</span>
               </h4>
               
               {/* Language Toolbar */}
-              <div className="flex items-center gap-1.5 bg-black/40 rounded-md border border-[rgba(255,255,255,0.05)] p-0.5">
-                <button 
-                  onClick={() => handleTranslate('en')} 
-                  className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${lang === 'en' ? 'bg-indigo-600 text-white' : 'text-[var(--text-secondary)] hover:text-white'}`}
-                >
-                  EN
-                </button>
-                <button 
-                  onClick={() => handleTranslate('hi')} 
-                  className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${lang === 'hi' ? 'bg-indigo-600 text-white' : 'text-[var(--text-secondary)] hover:text-white'}`}
-                >
-                  HI
-                </button>
-                <button 
-                  onClick={() => handleTranslate('ta')} 
-                  className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${lang === 'ta' ? 'bg-indigo-600 text-white' : 'text-[var(--text-secondary)] hover:text-white'}`}
-                >
-                  TA
-                </button>
-                <button 
-                  onClick={() => handleTranslate('te')} 
-                  className={`text-[9px] font-bold px-1.5 py-0.5 rounded transition-all ${lang === 'te' ? 'bg-indigo-600 text-white' : 'text-[var(--text-secondary)] hover:text-white'}`}
-                >
-                  TE
-                </button>
+              <div className="flex items-center gap-1 bg-[#090B0F] rounded-md border border-[rgba(255,255,255,0.08)] p-0.5">
+                {(['en', 'hi', 'ta', 'te'] as const).map((l) => (
+                  <button 
+                    key={l}
+                    onClick={() => handleTranslate(l)} 
+                    className={`text-[9px] font-bold px-2 py-1 rounded transition-all uppercase tracking-wide ${
+                      lang === l 
+                        ? 'bg-[rgba(212,175,55,0.15)] text-[#D4AF37]' 
+                        : 'text-[#667085] hover:text-[#F8FAFC]'
+                    }`}
+                  >
+                    {l}
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="p-3 bg-white/[0.01] rounded-lg border border-[rgba(255,255,255,0.03)] text-sm text-[var(--text-secondary)] leading-relaxed">
+            <div className="p-4 bg-[rgba(255,255,255,0.02)] rounded-xl border border-[rgba(255,255,255,0.04)] text-sm text-[#A8B3C7] leading-relaxed">
               {isTranslating ? (
-                <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+                <div className="flex items-center gap-2 text-xs text-[#667085]">
                   <Languages className="w-3.5 h-3.5 animate-spin" />
                   <span>Translating legal analysis...</span>
                 </div>
@@ -171,27 +167,30 @@ export default function RiskCard({ clause, onSelect }: RiskCardProps) {
 
           {/* Suggestion Counter Clause */}
           {clause.counterClause && (
-            <div className="flex flex-col gap-2 bg-emerald-950/10 border border-emerald-500/10 rounded-lg p-4">
+            <div className="flex flex-col gap-3 bg-[rgba(16,185,129,0.03)] border border-[rgba(16,185,129,0.1)] rounded-xl p-4">
               <div className="flex justify-between items-center">
-                <span className="text-xs font-bold text-emerald-400 uppercase tracking-widest">
-                  Suggested Counter-Clause
-                </span>
+                <div className="flex items-center gap-1.5">
+                  <GitPullRequest className="w-3.5 h-3.5 text-[#10B981]" />
+                  <span className="text-[11px] font-bold text-[#10B981] uppercase tracking-[0.15em] font-label">
+                    Negotiation Recommendation
+                  </span>
+                </div>
                 <button
                   onClick={() => handleCopy(clause.counterClause!, 'counter')}
-                  className="text-xs font-bold text-[var(--text-secondary)] hover:text-white flex items-center gap-1 bg-black/30 px-2 py-1 rounded border border-[rgba(255,255,255,0.05)] transition-colors"
+                  className="text-[10px] font-bold text-[#667085] hover:text-[#F8FAFC] flex items-center gap-1.5 bg-[#090B0F] px-2.5 py-1.5 rounded-md border border-[rgba(255,255,255,0.08)] transition-colors uppercase tracking-wider"
                 >
                   {copiedText === 'counter' ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-emerald-400" /> Copied!
+                      <Check className="w-3 h-3 text-[#10B981]" /> Copied
                     </>
                   ) : (
                     <>
-                      <Copy className="w-3.5 h-3.5" /> Copy
+                      <Copy className="w-3 h-3" /> Copy Text
                     </>
                   )}
                 </button>
               </div>
-              <p className="text-xs leading-relaxed font-mono text-[var(--text-secondary)] mt-1 select-all">
+              <p className="text-[13px] leading-relaxed font-mono text-[#A8B3C7] mt-1 select-all border-l-2 border-[#10B981]/30 pl-3">
                 "{clause.counterClause}"
               </p>
             </div>
