@@ -45,6 +45,9 @@ export default function Footer() {
         <p className="text-center text-[10px] text-[#667085] max-w-2xl leading-relaxed">
           Disclaimer: LexAI is an AI-powered legal analysis tool. It does not constitute professional legal advice. Always consult a qualified attorney for legal matters.
         </p>
+        <p className="text-center text-[10px] text-[#667085] mt-2">
+          Built by <a href="https://lakshminarasimman.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:underline">Lakshmi Narasimman</a>
+        </p>
       </div>
     </footer>
   );
