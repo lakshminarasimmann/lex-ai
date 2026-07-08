@@ -76,6 +76,18 @@ graph TD
 
 ---
 
+## 🛡️ Security Architecture & Deployment
+
+LexAI is built with a defense-in-depth approach, combining robust client-side enforcement with native Edge protections. 
+
+* **Zero Data Retention:** By design, the backend lacks a database. PDF parsing, LLM context generation, and inference are transient.
+* **Client-Side State:** Analysis JSONs are kept exclusively in the browser's `sessionStorage`. 
+* **Vercel Edge Firewall:** Automatically protects against basic DDoS vectors, blocks known malicious IP signatures, and handles volumetric threats at the Edge (Included natively with Vercel deployment).
+* **Strict Security Headers (CSP & HSTS):** The application is configured with `next.config.js` headers enforcing strict Content Security Policies (CSP), HTTP Strict Transport Security (HSTS) with a 2-year max-age, and anti-clickjacking (`X-Frame-Options: DENY`) to ensure payload execution safety.
+* **Environment Isolation:** Keys (like `GEMINI_API_KEY`) are kept isolated on the serverless edge and never leaked to the client boundary.
+
+---
+
 ## 🛠️ Technology Stack
 
 ### Frontend Client

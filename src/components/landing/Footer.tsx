@@ -27,7 +27,7 @@ export default function Footer() {
         <div className="flex items-center gap-6 text-xs">
           <Link href="/privacy" className="hover:text-[#F8FAFC] transition-colors duration-200">Privacy Policy</Link>
           <Link href="/terms" className="hover:text-[#F8FAFC] transition-colors duration-200">Terms of Service</Link>
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#F8FAFC] transition-colors duration-200">
+          <a href="https://github.com/lakshminarasimmann/lex-ai" target="_blank" rel="noopener noreferrer" className="hover:text-[#F8FAFC] transition-colors duration-200">
             GitHub
           </a>
         </div>
