@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
-import { File, AlertTriangle, AlertCircle, FileCheck, CheckCircle2, Scale } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { File, AlertTriangle, FileCheck, Scale, Play, Square } from 'lucide-react';
 import GaugeChart from '@/components/ui/GaugeChart';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
@@ -15,6 +15,45 @@ interface SummaryTabProps {
 
 export default function SummaryTab({ results }: SummaryTabProps) {
   const { document, clauses, analysis } = results;
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  useEffect(() => {
+    // Cleanup audio on unmount
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const toggleAudio = () => {
+    if (!window.speechSynthesis) {
+      alert("Text-to-speech is not supported in your browser.");
+      return;
+    }
+
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+    } else {
+      const summaryText = analysis.summary || 'A legal summary of this agreement could not be generated.';
+      const utterance = new SpeechSynthesisUtterance(summaryText);
+      
+      // Try to pick a natural sounding English voice
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => v.lang.includes('en-') && (v.name.includes('Google') || v.name.includes('Premium') || v.name.includes('Natural')));
+      if (preferredVoice) utterance.voice = preferredVoice;
+      
+      utterance.rate = 0.95; // Slightly slower for legal text
+      utterance.pitch = 1.0;
+      
+      utterance.onend = () => setIsPlaying(false);
+      utterance.onerror = () => setIsPlaying(false);
+      
+      setIsPlaying(true);
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
   // Calculate risk counts
   const riskCounts = {
@@ -73,9 +112,25 @@ export default function SummaryTab({ results }: SummaryTabProps) {
       {/* Executive Summary */}
       <FadeIn direction="up" delay={0.06}>
         <Card className="p-5 border-[rgba(255,255,255,0.06)] bg-[#11151C] flex flex-col gap-3" padding="none">
-          <div className="flex items-center gap-2">
-            <Scale className="w-4 h-4 text-[#D4AF37]" />
-            <h3 className="font-bold text-[#F8FAFC] text-sm tracking-wide">Executive Summary</h3>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Scale className="w-4 h-4 text-[#D4AF37]" />
+              <h3 className="font-bold text-[#F8FAFC] text-sm tracking-wide">Executive Summary</h3>
+            </div>
+            <button 
+              onClick={toggleAudio}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider transition-colors border ${
+                isPlaying 
+                  ? 'bg-[rgba(239,68,68,0.1)] border-[rgba(239,68,68,0.3)] text-[#EF4444] hover:bg-[rgba(239,68,68,0.15)]'
+                  : 'bg-[rgba(212,175,55,0.1)] border-[rgba(212,175,55,0.3)] text-[#D4AF37] hover:bg-[rgba(212,175,55,0.15)]'
+              }`}
+            >
+              {isPlaying ? (
+                <><Square className="w-3 h-3 fill-current" /> Stop Briefing</>
+              ) : (
+                <><Play className="w-3 h-3 fill-current" /> Listen to Brief</>
+              )}
+            </button>
           </div>
           <p className="text-sm text-[#A8B3C7] leading-relaxed">
             {analysis.summary || 'A legal summary of this agreement could not be generated. Please review individual risk flags.'}
