@@ -14,13 +14,8 @@ export default function Home() {
         <header className="fixed top-0 left-0 w-full z-50 border-b border-[rgba(255,255,255,0.06)] bg-[#090B0F]/80 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#D4AF37] to-[#B8860B] flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.2)]">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 3 2 12h4v8h4v-6h4v6h4v-8h4z" opacity="0"/>
-                  <line x1="12" y1="3" x2="12" y2="21" />
-                  <path d="M2 12h8M14 12h8" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
+              <div className="w-8 h-8 rounded-lg overflow-hidden shadow-[0_0_20px_rgba(212,175,55,0.2)] border border-[rgba(212,175,55,0.3)]">
+                <img src="/logo.png" alt="LexAI Logo" className="w-full h-full object-cover" />
               </div>
               <span className="font-bold text-[#F8FAFC] tracking-wider text-lg font-display">LexAI</span>
             </div>

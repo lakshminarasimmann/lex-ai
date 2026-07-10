@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { LayoutDashboard, AlertCircle, HelpCircle, Briefcase } from 'lucide-react';
+import { LayoutDashboard, AlertCircle, HelpCircle, Briefcase, Target } from 'lucide-react';
 import Tabs from '@/components/ui/Tabs';
 import Card from '@/components/ui/Card';
 import SummaryTab from './SummaryTab';
 import RiskFlagsTab from './RiskFlagsTab';
 import MissingClausesTab from './MissingClausesTab';
 import NegotiationTab from './NegotiationTab';
+import RiskRadarTab from './RiskRadarTab';
 import { AnalysisResults } from '@/lib/types';
 
 interface AnalysisPanelProps {
@@ -20,6 +21,7 @@ export default function AnalysisPanel({ results, onSelectClause }: AnalysisPanel
 
   const tabs = [
     { id: 'summary', label: 'Summary', icon: LayoutDashboard },
+    { id: 'topology', label: 'Topology', icon: Target },
     { id: 'risks', label: 'Risk Flags', icon: AlertCircle },
     { id: 'missing', label: 'Missing', icon: HelpCircle },
     { id: 'negotiation', label: 'Playbook', icon: Briefcase },
@@ -43,6 +45,7 @@ export default function AnalysisPanel({ results, onSelectClause }: AnalysisPanel
       {/* Tab Content Panels */}
       <div className="flex-1 overflow-hidden px-1">
         {activeTab === 'summary' && <SummaryTab results={results} />}
+        {activeTab === 'topology' && <RiskRadarTab docType={results.document.docType} />}
         {activeTab === 'risks' && (
           <RiskFlagsTab 
             clauses={results.clauses} 
